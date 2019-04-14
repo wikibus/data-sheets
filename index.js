@@ -16,10 +16,13 @@ function logger (req, res, next) {
 }
 
 function hydraMiddleware () {
+    const sparqlQueryEndpoint = process.env.SPARQL_QUERY_ENDPOINT || 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql'
+    const sparqlUpdateEndpoint = process.env.SPARQL_QUERY_ENDPOINT || 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql'
+
     return hydraBox.fromUrl('/api', 'file://' + path.join(__dirname, 'hydra/apidoc.ttl'), {
         debug: true,
-        sparqlEndpointQueryUrl: 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql',
-        sparqlEndpointUpdateUrl: 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql',
+        sparqlEndpointQueryUrl: sparqlQueryEndpoint,
+        sparqlEndpointUpdateUrl: sparqlUpdateEndpoint,
         contextHeader: '/context/'
     })
 }

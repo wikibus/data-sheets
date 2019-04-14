@@ -1,8 +1,8 @@
-@base <http://localhost:12345/api> .
+@base <http://localhost:12345/> .
 @prefix hydra: <http://www.w3.org/ns/hydra/core#> .
 @prefix hydra-box: <http://hydra-box.org/schema/> .
 
-<> a hydra:ApiDocumentation ;
+<api> a hydra:ApiDocumentation ;
   hydra:entrypoint <http://localhost:12345/> ;
   hydra:supportedClass <#Entrypoint> .
 
@@ -17,4 +17,4 @@
     ]
   ].
 
-<http://localhost:12345/> a <#Entrypoint> .
+<> a <#Entrypoint> .
