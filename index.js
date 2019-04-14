@@ -3,6 +3,7 @@ const express = require('express')
 const hydraBox = require('hydra-box')
 const path = require('path')
 const url = require('url')
+const program = require('commander')
 
 function logger (req, res, next) {
     process.stdout.write(`${req.method} ${req.url} `)
@@ -23,21 +24,27 @@ function hydraMiddleware () {
     })
 }
 
-Promise.resolve().then(async () => {
-    const baseUrl = 'http://localhost:12345/'
+program
+    .option('--port <port>', '', 12345)
+    .action(({ port }) => {
+        Promise.resolve().then(async () => {
+            const baseUrl = `http://localhost:${port}/`
 
-    const app = express()
+            const app = express()
 
-    app.use(logger)
-    app.use(cors({
-        exposedHeaders: ['link', 'location']
-    }))
-    app.use(await hydraMiddleware())
+            app.use(logger)
+            app.use(cors({
+                exposedHeaders: ['link', 'location']
+            }))
+            app.use(await hydraMiddleware())
 
-    const server = app.listen(url.parse(baseUrl).port, () => {
-        const host = server.address().address
-        const port = server.address().port
+            const server = app.listen(url.parse(baseUrl).port, () => {
+                const host = server.address().address
+                const port = server.address().port
 
-        console.log(`listening at http://${host}:${port}`)
+                console.log(`listening at http://${host}:${port}`)
+            })
+        }).catch(err => console.error(err))
     })
-}).catch(err => console.error(err))
+
+program.parse(process.argv)
