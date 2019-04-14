@@ -4,7 +4,7 @@
 
 <api> a hydra:ApiDocumentation ;
   hydra:entrypoint <http://localhost:12345/> ;
-  hydra:supportedClass <#Entrypoint> .
+  hydra:supportedClass <api#Entrypoint> .
 
 <#Entrypoint> a hydra:SupportedClass ;
   hydra:supportedOperation [
@@ -17,4 +17,4 @@
     ]
   ].
 
-<> a <#Entrypoint> .
+<> a <api#Entrypoint> .
