@@ -6,7 +6,7 @@
   hydra:entrypoint <http://localhost:12345/> ;
   hydra:supportedClass <api#Entrypoint> .
 
-<#Entrypoint> a hydra:SupportedClass ;
+<api#Entrypoint> a hydra:SupportedClass ;
   hydra:supportedOperation [
     a hydra-box:View ;
     hydra:title "Datasheet entrypoint" ;
