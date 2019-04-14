@@ -1,0 +1,21 @@
+{
+  "name": "wikibus-data-sheets",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wikibus/data-sheets.git"
+  },
+  "author": "Tomasz Pluskiewicz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wikibus/data-sheets/issues"
+  },
+  "homepage": "https://github.com/wikibus/data-sheets#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "hydra-box": "git+https://github.com/zazuko/hydra-box.git#sparql-update-hack"
+  }
+}
