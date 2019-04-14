@@ -1,4 +1,20 @@
-@base <http://localhost:12345/> .
+@base <http://localhost:12345/api> .
 @prefix hydra: <http://www.w3.org/ns/hydra/core#> .
+@prefix hydra-box: <http://hydra-box.org/schema/> .
 
-<> a hydra:ApiDocumentation .
+<> a hydra:ApiDocumentation ;
+  hydra:entrypoint <http://localhost:12345/> ;
+  hydra:supportedClass <#Entrypoint> .
+
+<#Entrypoint> a hydra:SupportedClass ;
+  hydra:supportedOperation [
+    a hydra-box:View ;
+    hydra:title "Datasheet entrypoint" ;
+    hydra:method "GET" ;
+    hydra-box:code [
+      a hydra-box:SparqlQuery ;
+      hydra-box:source <file:hydra/entrypoint.get.sparql>
+    ]
+  ].
+
+<http://localhost:12345/> a <#Entrypoint> .

@@ -4,6 +4,16 @@ const hydraBox = require('hydra-box')
 const path = require('path')
 const url = require('url')
 
+function logger (req, res, next) {
+    process.stdout.write(`${req.method} ${req.url} `)
+
+    res.on('finish', () => {
+        process.stdout.write(`${res.statusCode}\n`)
+    })
+
+    next()
+}
+
 function hydraMiddleware () {
     return hydraBox.fromUrl('/api', 'file://' + path.join(__dirname, 'hydra/apidoc.ttl'), {
         debug: true,
@@ -18,7 +28,7 @@ Promise.resolve().then(async () => {
 
     const app = express()
 
-    // app.use(logger)
+    app.use(logger)
     app.use(cors({
         exposedHeaders: ['link', 'location']
     }))
