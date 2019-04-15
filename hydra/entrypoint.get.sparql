@@ -1,6 +1,8 @@
+BASE <http://localhost:12345/> .
+
 CONSTRUCT
 {
-  <http://localhost:12345/> a <http://localhost:12345/api#Entrypoint> ;
+  <> a <api#Entrypoint> ;
 }
 WHERE {
 

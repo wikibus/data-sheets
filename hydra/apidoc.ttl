@@ -3,7 +3,7 @@
 @prefix hydra-box: <http://hydra-box.org/schema/> .
 
 <api> a hydra:ApiDocumentation ;
-  hydra:entrypoint <http://localhost:12345/> ;
+  hydra:entrypoint <> ;
   hydra:supportedClass <api#Entrypoint> .
 
 <api#Entrypoint> a hydra:SupportedClass ;
