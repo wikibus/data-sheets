@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "find hydra -type f -not -name *.bak -exec sed -i .bak 's/http:\\/\\/localhost:12345/'\"$DEPLOY_URL\"'/g' \"{}\" +;"
+    "build": "find hydra -type f -not -name *.bak -exec sed -i .bak \"s/http:\\/\\/localhost:12345/$DEPLOY_URL/g\" \"{}\" +;"
   },
   "repository": {
     "type": "git",
