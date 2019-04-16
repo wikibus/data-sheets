@@ -7,7 +7,6 @@ const program = require('commander')
 
 function logger (req, res, next) {
     process.stdout.write(`${req.method} ${req.url} \n`)
-    Object.entries(req.headers).map(e => `${e[0]}: ${e[1]} \n`).forEach(h => process.stdout.write(h))
 
     res.on('finish', () => {
         process.stdout.write(`${res.statusCode}\n`)
@@ -36,6 +35,7 @@ program
 
             const app = express()
 
+            app.enable('trust proxy')
             app.use(logger)
             app.use(cors({
                 exposedHeaders: ['link', 'location']
