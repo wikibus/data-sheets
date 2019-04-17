@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "build": "find hydra -type f -not -name *.bak -exec sed -i.bak \"s#http://localhost:12345#$DEPLOY_URL#g\" '{}' +;"
   },
   "repository": {
@@ -23,5 +24,13 @@
     "express": "^4.16.4",
     "hydra-box": "git+https://github.com/zazuko/hydra-box.git#sparql-update-hack",
     "sparql-http-client": "git+https://github.com/tpluscode/sparql-http-client.git#existing-query-params"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }
