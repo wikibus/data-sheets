@@ -5,6 +5,8 @@ const path = require('path')
 const url = require('url')
 const program = require('commander')
 
+require('dotenv').config()
+
 function logger (req, res, next) {
     process.stdout.write(`${req.method} ${req.url} \n`)
 
@@ -16,8 +18,8 @@ function logger (req, res, next) {
 }
 
 function hydraMiddleware () {
-    const sparqlQueryEndpoint = process.env.SPARQL_QUERY_ENDPOINT || 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql'
-    const sparqlUpdateEndpoint = process.env.SPARQL_QUERY_ENDPOINT || 'https://dydra.com/tpluscode/wikibus-test-tech-sheets/sparql'
+    const sparqlQueryEndpoint = process.env.SPARQL_QUERY_ENDPOINT
+    const sparqlUpdateEndpoint = process.env.SPARQL_UPDATE_ENDPOINT
 
     return hydraBox.fromUrl('/api', 'file://' + path.join(__dirname, 'hydra/apidoc.ttl'), {
         debug: true,

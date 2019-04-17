@@ -19,6 +19,7 @@
   "dependencies": {
     "commander": "^2.20.0",
     "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "hydra-box": "git+https://github.com/zazuko/hydra-box.git#sparql-update-hack",
     "sparql-http-client": "git+https://github.com/tpluscode/sparql-http-client.git#existing-query-params"
