@@ -4,6 +4,8 @@ import hydraBox from 'hydra-box'
 import path from 'path'
 import url from 'url'
 import program from 'commander'
+import { NotFoundError } from './lib/error'
+import { httpProblemMiddleware } from './lib/express/problemDetails'
 
 require('dotenv').config()
 
@@ -41,6 +43,14 @@ program
         exposedHeaders: ['link', 'location'],
       }))
       app.use(await hydraMiddleware())
+      app.use(function (req, res, next) {
+        next(new NotFoundError())
+      })
+      app.use(function (err, req, res, next) {
+        console.log(err)
+        next(err)
+      })
+      app.use(httpProblemMiddleware)
 
       app.listen(new url.URL(baseUrl).port, () => {
         console.log(`listening at ${baseUrl}`)
