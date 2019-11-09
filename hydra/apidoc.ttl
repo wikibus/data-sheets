@@ -17,10 +17,6 @@
       code:arguments
         (
           [
-            a code:EcmaScript ;
-            code:link <file:lib/express/authentication>
-          ]
-          [
             a                hydra-box:SparqlQuery ;
             hydra-box:source <file:hydra/entrypoint.get.sparql>
           ]

@@ -6,10 +6,11 @@ import url from 'url'
 import program from 'commander'
 import { NotFoundError } from './lib/error'
 import { httpProblemMiddleware } from './lib/express/problemDetails'
+import authentication from './lib/express/authentication'
 
 require('dotenv').config()
 
-function logger (req, res, next) {
+function logger (req: express.Request, res: express.Response, next: express.NextFunction) {
   process.stdout.write(`${req.method} ${req.url} \n`)
 
   res.on('finish', () => {
@@ -42,11 +43,12 @@ program
       app.use(cors({
         exposedHeaders: ['link', 'location'],
       }))
+      app.use(authentication)
       app.use(await hydraMiddleware())
       app.use(function (req, res, next) {
         next(new NotFoundError())
       })
-      app.use(function (err, req, res, next) {
+      app.use(function (err: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
         console.log(err)
         next(err)
       })
