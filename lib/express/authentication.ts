@@ -1,5 +1,5 @@
-const jwt = require('express-jwt')
-const jwksRsa = require('jwks-rsa')
+import jwt = require('express-jwt');
+import jwksRsa = require('jwks-rsa')
 
 module.exports = jwt({
   // Dynamically provide a signing key
@@ -9,11 +9,11 @@ module.exports = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: 'https://wikibus.eu.auth0.com/.well-known/jwks.json'
+    jwksUri: 'https://wikibus.eu.auth0.com/.well-known/jwks.json',
   }),
 
   // Validate the audience and the issuer.
   audience: 'https://wikibus.org',
   issuer: 'https://wikibus.eu.auth0.com/',
-  algorithms: ['RS256']
+  algorithms: ['RS256'],
 })

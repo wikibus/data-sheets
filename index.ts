@@ -1,9 +1,9 @@
-const cors = require('cors')
-const express = require('express')
-const hydraBox = require('hydra-box')
-const path = require('path')
-const url = require('url')
-const program = require('commander')
+import cors from 'cors'
+import express from 'express'
+import hydraBox from 'hydra-box'
+import path from 'path'
+import url from 'url'
+import program from 'commander'
 
 require('dotenv').config()
 
@@ -23,7 +23,7 @@ function hydraMiddleware () {
   return hydraBox.fromUrl('/api', 'file://' + path.join(__dirname, 'hydra/apidoc.ttl'), {
     debug: true,
     sparqlEndpointUrl,
-    contextHeader: '/context/'
+    contextHeader: '/context/',
   })
 }
 
@@ -38,15 +38,12 @@ program
       app.enable('trust proxy')
       app.use(logger)
       app.use(cors({
-        exposedHeaders: ['link', 'location']
+        exposedHeaders: ['link', 'location'],
       }))
       app.use(await hydraMiddleware())
 
-      const server = app.listen(new url.URL(baseUrl).port, () => {
-        const host = server.address().address
-        const port = server.address().port
-
-        console.log(`listening at http://${host}:${port}`)
+      app.listen(new url.URL(baseUrl).port, () => {
+        console.log(`listening at ${baseUrl}`)
       })
     }).catch(err => console.error(err))
   })
