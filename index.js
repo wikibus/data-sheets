@@ -18,13 +18,11 @@ function logger (req, res, next) {
 }
 
 function hydraMiddleware () {
-  const sparqlQueryEndpoint = process.env.SPARQL_QUERY_ENDPOINT
-  const sparqlUpdateEndpoint = process.env.SPARQL_UPDATE_ENDPOINT
+  const sparqlEndpointUrl = process.env.SPARQL_ENDPOINT
 
   return hydraBox.fromUrl('/api', 'file://' + path.join(__dirname, 'hydra/apidoc.ttl'), {
     debug: true,
-    sparqlEndpointQueryUrl: sparqlQueryEndpoint,
-    sparqlEndpointUpdateUrl: sparqlUpdateEndpoint,
+    sparqlEndpointUrl,
     contextHeader: '/context/'
   })
 }

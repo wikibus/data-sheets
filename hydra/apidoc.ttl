@@ -1,19 +1,30 @@
 @base <http://localhost:12345/> .
 @prefix hydra: <http://www.w3.org/ns/hydra/core#> .
 @prefix hydra-box: <http://hydra-box.org/schema/> .
+@prefix code: <https://code.described.at/> .
 
 <api> a hydra:ApiDocumentation ;
   hydra:entrypoint <> ;
   hydra:supportedClass <api#Entrypoint> .
 
-<api#Entrypoint> a hydra:SupportedClass ;
+<api#Entrypoint> a hydra:Class ;
   hydra:supportedOperation [
     a hydra-box:View ;
     hydra:title "Datasheet entrypoint" ;
     hydra:method "GET" ;
-    hydra-box:code [
-      a hydra-box:SparqlQuery ;
-      hydra-box:source <file:hydra/entrypoint.get.sparql>
+    code:implementedBy [
+      a hydra-box:middlewareChain ;
+      code:arguments
+        (
+          [
+            a code:EcmaScript ;
+            code:link <file:lib/express/authentication>
+          ]
+          [
+            a                hydra-box:SparqlQuery ;
+            hydra-box:source <file:hydra/entrypoint.get.sparql>
+          ]
+        )
     ]
   ].
 

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "lint": "eslint .",
     "build": "find hydra -type f -not -name *.bak -exec sed -i.bak \"s#http://localhost:12345#$DEPLOY_URL#g\" '{}' +;"
   },
@@ -22,8 +23,10 @@
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
-    "hydra-box": "git+https://github.com/zazuko/hydra-box.git#sparql-update-hack",
-    "sparql-http-client": "git+https://github.com/tpluscode/sparql-http-client.git#existing-query-params"
+    "express-jwt": "^5.3.1",
+    "hydra-box": "^0.4.1",
+    "jwks-rsa": "^1.4.0",
+    "sparql-http-client": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
