@@ -2,10 +2,14 @@
 @prefix hydra: <http://www.w3.org/ns/hydra/core#> .
 @prefix hydra-box: <http://hydra-box.org/schema/> .
 @prefix code: <https://code.described.at/> .
+@prefix ds: <http://data-sheets.wikibus.org/vocab#> .
+@prefix api: <http://data-sheets.wikibus.org/api#> .
 
 <api> a hydra:ApiDocumentation ;
   hydra:entrypoint <> ;
-  hydra:supportedClass <api#Entrypoint> .
+  hydra:supportedClass
+    <api#Entrypoint> ,
+    ds:DataSheet .
 
 <api#Entrypoint> a hydra:Class ;
   hydra:supportedOperation [
@@ -22,6 +26,53 @@
           ]
         )
     ]
-  ].
+  ] ,
+  [
+    a hydra-box:View ;
+    hydra:title "Datasheet entrypoint" ;
+    hydra:method "POST" ;
+    code:implementedBy [
+      a hydra-box:middlewareChain ;
+      code:arguments
+        (
+          [
+            a code:EcmaScript ;
+            code:link <file:lib/express/handlers/data-sheet/create#post>
+          ]
+        )
+    ]
+  ] .
+
+ds:DataSheet a hydra:Class ;
+  hydra:supportedOperation
+  [
+    a hydra-box:View ;
+    hydra:method "GET" ;
+    code:implementedBy [
+      a hydra-box:middlewareChain ;
+      code:arguments
+        (
+          [
+            a code:EcmaScript ;
+            code:link <file:lib/express/handlers/data-sheet/instance#get>
+          ]
+        )
+    ]
+  ] ,
+  [
+    a hydra-box:View ;
+    hydra:method "PUT" ;
+    code:implementedBy [
+      a hydra-box:middlewareChain ;
+      code:arguments
+        (
+          [
+            a code:EcmaScript ;
+            code:link <file:lib/express/handlers/data-sheet/instance#put>
+          ]
+        )
+    ]
+  ] .
 
 <> a <api#Entrypoint> .
+<data-sheet/:id> a ds:DataSheet .

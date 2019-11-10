@@ -1,8 +1,10 @@
 BASE <http://localhost:12345/>
 
+
 CONSTRUCT
 {
   <> a <api#Entrypoint> ;
+     api:
 }
 WHERE {
 

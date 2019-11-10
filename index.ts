@@ -4,11 +4,14 @@ import hydraBox from 'hydra-box'
 import path from 'path'
 import url from 'url'
 import program from 'commander'
+import dotenv from 'dotenv'
+import dotenvExpand from 'dotenv-expand'
 import { NotFoundError } from './lib/error'
 import { httpProblemMiddleware } from './lib/express/problemDetails'
 import authentication from './lib/express/authentication'
 
-require('dotenv').config()
+dotenvExpand(dotenv.config())
+import('./lib/handlers')
 
 function logger (req: express.Request, res: express.Response, next: express.NextFunction) {
   process.stdout.write(`${req.method} ${req.url} \n`)
