@@ -6,12 +6,5 @@ interface CreateCommand {
 }
 
 export const createDataSheet = initialize<DataSheet, CreateCommand>(function ({ label }, emitter) {
-  const ds = new DataSheetEntity()
-  ds.setEmitter(emitter)
-
-  ds.applyEvent('DataSheetCreated', {
-    label,
-  })
-
-  return ds
+  return new DataSheetEntity({ emitter, label })
 })

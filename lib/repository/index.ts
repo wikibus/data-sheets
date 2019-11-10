@@ -5,8 +5,4 @@ import { DataSheet, DataSheetEntity, DataSheetEvents } from '../domain/data-shee
 const es = eventstore()
 es.init()
 
-export const dataSheets = new EventSourcedRepository<DataSheet, DataSheetEntity, DataSheetEvents>(es, (id) => {
-  return new DataSheetEntity({
-    id,
-  })
-})
+export const dataSheets = new EventSourcedRepository<DataSheet, DataSheetEvents>(es, DataSheetEntity)

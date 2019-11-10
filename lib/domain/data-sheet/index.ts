@@ -1,13 +1,26 @@
-import { Applicators, EventSourcedEntity } from '../EventSourcedEntity'
+import { Applicators, EventSourcedEntity, Initializer } from '../EventSourcedEntity'
 import { Entity } from '@tpluscode/fun-ddr'
 
 export interface DataSheet extends Entity {
   label: string;
-  rename(label: string): void;
+  rename(label: string): DataSheet;
+}
+
+interface ConstructorParams {
+  label: string;
 }
 
 export class DataSheetEntity extends EventSourcedEntity<DataSheetEvents> implements DataSheet {
   private __label: string
+
+  public constructor (init: Initializer & Partial<ConstructorParams>) {
+    super(init)
+    if ('label' in init) {
+      this.applyEvent('DataSheetCreated', {
+        label: init.label,
+      })
+    }
+  }
 
   public get label () {
     return this.__label
@@ -19,6 +32,8 @@ export class DataSheetEntity extends EventSourcedEntity<DataSheetEvents> impleme
         label,
       })
     }
+
+    return this
   }
 
   protected _getApplicators (): Applicators<DataSheetEvents> {

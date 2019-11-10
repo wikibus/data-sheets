@@ -7,20 +7,24 @@ import Event from 'eventstore/lib/event'
 import EventStream from 'eventstore/lib/eventStream'
 import { ConcurrencyError } from '@tpluscode/fun-ddr/lib/errors'
 
-export class EventSourcedRepository<IE extends Entity, E extends EventSourcedEntity<TEvents> & IE, TEvents> implements Repository<IE> {
-  private readonly eventstore: Eventstore
-  private createEntity: (id: string) => E
+interface EConstructor<TEvents> {
+  new({ id: string }): EventSourcedEntity<TEvents>;
+}
 
-  public constructor (eventstore: Eventstore, createEntity: (id: string) => E) {
+export class EventSourcedRepository<E extends Entity, TEvents> implements Repository<E> {
+  private readonly eventstore: Eventstore
+  private readonly __impl: EConstructor<TEvents>
+
+  public constructor (eventstore: Eventstore, impl: EConstructor<TEvents>) {
     this.eventstore = eventstore
-    this.createEntity = createEntity
+    this.__impl = impl
   }
 
   public delete (id: string): Promise<void> {
     return Promise.reject(new Error('Not implemented'))
   }
 
-  public load (id: string): Promise<AggregateRoot<IE>> {
+  public load (id: string) {
     return new Promise<EventStream>((resolve, reject) => {
       this.eventstore.getEventStream(id, (err, stream) => {
         if (err) reject(err)
@@ -29,17 +33,17 @@ export class EventSourcedRepository<IE extends Entity, E extends EventSourcedEnt
         }
       })
     }).then(stream => {
-      const entity = this.createEntity(id)
+      const entity = new this.__impl({ id })
       stream.events.forEach((ev: Event<DomainEvent>) => {
         entity.applyEvent(ev.payload.name, ev.payload.data as any)
       })
-      const ar = new AggregateRootImpl<IE>(entity, stream.lastRevision + 1)
-      entity.setEmitter(ar)
+      const ar = new AggregateRootImpl<E>(entity as any, stream.lastRevision + 1)
+      entity._setEmitter(ar)
       return ar
     })
   }
 
-  public async save (ar: AggregateRoot<IE>, version: number): Promise<void> {
+  public async save (ar: AggregateRoot<E>, version: number): Promise<void> {
     const state = await ar.state
     if (!state) {
       throw new Error(`Failed to save aggregate: ${await ar.error}`)

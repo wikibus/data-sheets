@@ -6,7 +6,5 @@ interface RenameCommand {
 }
 
 export const rename = mutate<DataSheet, RenameCommand>((state, cmd) => {
-  state.rename(cmd.label)
-
-  return state
+  return state.rename(cmd.label)
 })
