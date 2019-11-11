@@ -1,5 +1,5 @@
 BASE <http://localhost:12345/>
-PREFIX api: <https://data-sheets.wikibus.org/api#>
+PREFIX api: <https://facts.wikibus.org/api#>
 
 CONSTRUCT
 {

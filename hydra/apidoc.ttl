@@ -2,8 +2,8 @@
 @prefix hydra:     <http://www.w3.org/ns/hydra/core#> .
 @prefix hydra-box: <http://hydra-box.org/schema/> .
 @prefix code:      <https://code.described.at/> .
-@prefix ds:        <https://data-sheets.wikibus.org/vocab#> .
-@prefix api:       <https://data-sheets.wikibus.org/api#> .
+@prefix ds:        <https://facts.wikibus.org/vocab#> .
+@prefix api:       <https://facts.wikibus.org/api#> .
 @prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix schema:    <http://schema.org/> .
 

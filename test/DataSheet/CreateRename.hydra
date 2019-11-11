@@ -1,5 +1,5 @@
-PREFIX ds: <https://data-sheets.wikibus.org/vocab#>
-PREFIX api: <https://data-sheets.wikibus.org/api#>
+PREFIX ds: <https://facts.wikibus.org/vocab#>
+PREFIX api: <https://facts.wikibus.org/api#>
 PREFIX schema: <http://schema.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
