@@ -5,7 +5,7 @@ import { EventSourcedEntity } from '../domain/EventSourcedEntity'
 import Eventstore from 'eventstore/lib/eventstore'
 import Event from 'eventstore/lib/event'
 import EventStream from 'eventstore/lib/eventStream'
-import { ConcurrencyError } from '@tpluscode/fun-ddr/lib/errors'
+import { AggregateNotFoundError, ConcurrencyError } from '@tpluscode/fun-ddr/lib/errors'
 
 interface EConstructor<TEvents> {
   new({ id: string }): EventSourcedEntity<TEvents>;
@@ -24,7 +24,7 @@ export class EventSourcedRepository<E extends Entity, TEvents> implements Reposi
     return Promise.reject(new Error('Not implemented'))
   }
 
-  public load (id: string) {
+  public load (id: string): Promise<AggregateRoot<E>> {
     return new Promise<EventStream>((resolve, reject) => {
       this.eventstore.getEventStream(id, (err, stream) => {
         if (err) reject(err)
@@ -33,6 +33,10 @@ export class EventSourcedRepository<E extends Entity, TEvents> implements Reposi
         }
       })
     }).then(stream => {
+      if (stream.lastRevision === -1) {
+        return new AggregateRootImpl<E>(new AggregateNotFoundError(id))
+      }
+
       const entity = new this.__impl({ id })
       stream.events.forEach((ev: Event<DomainEvent>) => {
         entity.applyEvent(ev.payload.name, ev.payload.data as any)

@@ -9,7 +9,7 @@ program.option('--grep <pattern>', 'RegExp to filter the test cases')
 program.parse(process.argv)
 
 const scenarios = Object.entries({
-  '': '',
+  'DataSheet/CreateRename': '',
 })
 
 const selectedScenarios = scenarios
@@ -45,7 +45,7 @@ function runScenarios () {
 
         const childProcess = spawn(
           `hydra-validator`,
-          [`e2e`, `--docs`, `test/${scenario}.hydra.json`, `${process.env.BASE_URI}${path}`],
+          [`e2e`, `--docs`, `test/${scenario}.hydra.json`, `${process.env.BASE_URI}${path}`, '--strict'],
           { stdio: 'inherit' })
 
         childProcess.on('exit', code => {

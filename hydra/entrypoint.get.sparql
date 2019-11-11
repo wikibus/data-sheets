@@ -1,10 +1,12 @@
 BASE <http://localhost:12345/>
-
+PREFIX api: <https://data-sheets.wikibus.org/api#>
 
 CONSTRUCT
 {
-  <> a <api#Entrypoint> ;
-     api:
+  <> a api:Entrypoint ;
+     api:dataSheetCollection <data-sheets> .
+
+  <data-sheets> a api:DataSheetCollection .
 }
 WHERE {
 
