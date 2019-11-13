@@ -2,7 +2,7 @@ language: javascript
 node_js: "12"
 
 env:
-  - FUSEKI_VERSION=3.12
+  - FUSEKI_VERSION=3.12.0
 
 before_script:
   - npm install -g wait-on
