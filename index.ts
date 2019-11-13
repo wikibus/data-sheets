@@ -34,10 +34,9 @@ function hydraMiddleware () {
 }
 
 program
-  .option('--port <port>', '', 12345)
-  .action(({ port }) => {
+  .action(() => {
     Promise.resolve().then(async () => {
-      const baseUrl = `http://localhost:${port}/`
+      const baseUrl = `${process.env.BASE_URI}`
 
       const app = express()
 
@@ -57,7 +56,7 @@ program
       })
       app.use(httpProblemMiddleware)
 
-      app.listen(new url.URL(baseUrl).port, () => {
+      app.listen((process.env.PORT || new url.URL(baseUrl).port), () => {
         console.log(`listening at ${baseUrl}`)
       })
     }).catch(err => console.error(err))
