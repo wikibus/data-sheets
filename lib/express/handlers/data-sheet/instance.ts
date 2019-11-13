@@ -1,4 +1,5 @@
 import express from 'express'
+import Timeout from 'await-timeout'
 import { getDataSheet } from '../../../read-model/data-sheet-drafts'
 import { dataSheets } from '../../../repository'
 import { rename } from '../../../domain/data-sheet/rename'
@@ -29,6 +30,7 @@ export async function put (req: express.DataCubeRequest, res, next) {
     label: label.value,
   })
     .commit(dataSheets)
+    .then(() => Timeout.set(10))
     .then(() => getDataSheet(req.params.id))
     .then(graph => {
       if (graph.length === 0) {
