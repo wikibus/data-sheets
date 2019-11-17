@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import asyncMiddleware from 'middleware-async'
-import Timeout from 'await-timeout'
 import { getDataSheet } from '../../../read-model/data-sheet-drafts'
 import repo from '../../../repository'
 import { rename } from '../../../domain/data-sheet/rename'
 import { buildVariables } from '../../buildVariables'
 import { expand } from '@zazuko/rdf-vocabularies'
 import { NotFoundError } from '../../../error'
+import { preferredTimeout } from '../../async'
 
 export function get (req: Request, res, next) {
   getDataSheet(req.params.id)
@@ -32,7 +32,7 @@ export const put = asyncMiddleware(async (req: Request, res: Response, next) => 
     label: label.value,
   })
     .commit(dataSheets)
-    .then(() => Timeout.set(100))
+    .then(() => preferredTimeout(req))
     .then(() => get(req, res, next))
     .catch(next)
 })

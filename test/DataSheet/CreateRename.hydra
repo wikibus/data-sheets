@@ -31,6 +31,7 @@ With Class ds:DataSheet {
   Expect Operation schema:UpdateAction {
     Invoke {
       Content-Type "text/turtle"
+      Prefer "respond-async; wait=0.5"
 
       ```
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .

@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import preferenceHeaders from 'express-prefer'
 import hydraBox from 'hydra-box'
 import path from 'path'
 import url from 'url'
@@ -42,6 +43,7 @@ program
 
       app.enable('trust proxy')
       app.use(logger)
+      app.use(preferenceHeaders)
       app.use(cors({
         exposedHeaders: ['link', 'location'],
       }))
