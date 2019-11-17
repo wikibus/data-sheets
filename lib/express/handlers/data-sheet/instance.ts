@@ -32,14 +32,7 @@ export const put = asyncMiddleware(async (req: Request, res: Response, next) => 
     label: label.value,
   })
     .commit(dataSheets)
-    .then(() => Timeout.set(10))
-    .then(() => getDataSheet(req.params.id))
-    .then(graph => {
-      if (graph.length === 0) {
-        throw new NotFoundError()
-      }
-
-      res.graph(graph)
-    })
+    .then(() => Timeout.set(100))
+    .then(() => get(req, res, next))
     .catch(next)
 })
