@@ -23,14 +23,9 @@ api:Entrypoint a                        hydra:Class ;
                                           hydra:title        "Datasheet entrypoint" ;
                                           hydra:method       "GET" ;
                                           code:implementedBy [
-                                                               a              hydra-box:middlewareChain ;
-                                                               code:arguments (
-                                                                                [
-                                                                                  a hydra-box:SparqlQuery ;
-                                                                                  hydra-box:source
-                                                                                    <file:hydra/entrypoint.get.sparql>
-                                                                                ]
-                                                                              )
+                                                               a code:EcmaScript ;
+                                                               code:link
+                                                                 <file:lib/express/handlers/entrypoint#get>
                                                              ]
                                         ] .
 

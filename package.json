@@ -9,8 +9,7 @@
     "jest": "jest",
     "test": "ts-node test/run.ts",
     "test:analyse": "dotenv test/analyse.sh",
-    "build": "tsc -p tsconfig.json; cp -r hydra dist",
-    "prebuild": "find hydra -type f -not -name *.bak -exec sed -i.bak \"s#http://localhost:12345#$DEPLOY_URL#g\" '{}' +;"
+    "build": "tsc -p tsconfig.json; cp -r hydra dist"
   },
   "repository": {
     "type": "git",
