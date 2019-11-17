@@ -43,14 +43,27 @@ declare module 'eventstore/lib/eventStream' {
 declare module 'eventstore' {
   import Eventstore from 'eventstore/lib/eventstore'
 
-  interface StoreOptions {
-    type: string;
+  interface MongoOptions {
     url?: string;
     eventsCollectionName?: string;
   }
 
+  interface AzureTableStorageOptions {
+    storageAccount: string;
+    storageAccessKey: string;
+    storageTableHost: string;
+    eventsTableName?: string;
+    snapshotsTableName?: string;
+    timeout?: number;
+    emitStoreEvents?: boolean;
+  }
+
+  interface StoreOptions {
+    type: string;
+  }
+
   interface Factory {
-    (options?: StoreOptions): Eventstore;
+    (options?: StoreOptions & (MongoOptions | AzureTableStorageOptions)): Eventstore;
   }
 
   const eventstore: Factory
