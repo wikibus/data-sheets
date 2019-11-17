@@ -1,13 +1,16 @@
 import express from 'express'
+import { asyncMiddleware } from 'middleware-async'
 import { createDataSheet } from '../../../domain/data-sheet/create'
-import { dataSheets } from '../../../repository'
+import repo from '../../../repository'
 import { buildVariables } from '../../buildVariables'
 import { expand } from '@zazuko/rdf-vocabularies'
 
-export function post (req: express.DataCubeRequest, res: express.Response, next: express.NextFunction) {
+export const post = asyncMiddleware(async (req: express.Request, res, next) => {
   const { label } = buildVariables(req, {
     label: expand('rdfs:label'),
   })
+
+  const { dataSheets } = await repo
 
   createDataSheet({
     label: label.value,
@@ -19,4 +22,4 @@ export function post (req: express.DataCubeRequest, res: express.Response, next:
       res.end()
     })
     .catch(next)
-}
+})

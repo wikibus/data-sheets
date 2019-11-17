@@ -1,13 +1,14 @@
-import express from 'express'
+import { Request, Response } from 'express'
+import asyncMiddleware from 'middleware-async'
 import Timeout from 'await-timeout'
 import { getDataSheet } from '../../../read-model/data-sheet-drafts'
-import { dataSheets } from '../../../repository'
+import repo from '../../../repository'
 import { rename } from '../../../domain/data-sheet/rename'
 import { buildVariables } from '../../buildVariables'
 import { expand } from '@zazuko/rdf-vocabularies'
 import { NotFoundError } from '../../../error'
 
-export function get (req: express.Request, res, next) {
+export function get (req: Request, res, next) {
   getDataSheet(req.params.id)
     .then(graph => {
       if (graph.length === 0) {
@@ -19,7 +20,8 @@ export function get (req: express.Request, res, next) {
     .catch(next)
 }
 
-export async function put (req: express.DataCubeRequest, res, next) {
+export const put = asyncMiddleware(async (req: Request, res: Response, next) => {
+  const { dataSheets } = await repo
   const ar = await dataSheets.load(req.params.id)
 
   const { label } = buildVariables(req, {
@@ -40,4 +42,4 @@ export async function put (req: express.DataCubeRequest, res, next) {
       res.graph(graph)
     })
     .catch(next)
-}
+})

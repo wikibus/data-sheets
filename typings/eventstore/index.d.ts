@@ -6,7 +6,7 @@ declare module 'eventstore/lib/eventstore' {
   }
 
   class Eventstore {
-    public init(): void
+    public init(cb?: (err: Error) => void): void
     public getEventStream(queryOrId: Query | string, cb: (err: Error, stream: EventStream) => void): void
   }
 
@@ -43,8 +43,14 @@ declare module 'eventstore/lib/eventStream' {
 declare module 'eventstore' {
   import Eventstore from 'eventstore/lib/eventstore'
 
+  interface StoreOptions {
+    type: string;
+    url?: string;
+    eventsCollectionName?: string;
+  }
+
   interface Factory {
-    (): Eventstore;
+    (options?: StoreOptions): Eventstore;
   }
 
   const eventstore: Factory
