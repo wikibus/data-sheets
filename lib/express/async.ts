@@ -1,7 +1,8 @@
 import { Request } from 'express'
 import Timeout from 'await-timeout'
+import asyncMiddleware from 'middleware-async'
 
-export async function preferredTimeout (req: Request) {
+export const preferredTimeout = asyncMiddleware(async (req: Request, res, next) => {
   if (req.prefer.wait) {
     const seconds = Number.parseFloat(req.prefer.wait)
 
@@ -9,4 +10,6 @@ export async function preferredTimeout (req: Request) {
       await Timeout.set(seconds * 1000)
     }
   }
-}
+
+  next()
+})

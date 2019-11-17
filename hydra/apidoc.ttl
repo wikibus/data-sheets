@@ -86,6 +86,16 @@ ds:DataSheet a                        hydra:Class ;
                                                                                 code:link
                                                                                   <file:lib/express/handlers/data-sheet/instance#put>
                                                                               ]
+                                                                              [
+                                                                                a code:EcmaScript ;
+                                                                                code:link
+                                                                                  <file:lib/express/async#preferredTimeout>
+                                                                              ]
+                                                                              [
+                                                                                a code:EcmaScript ;
+                                                                                code:link
+                                                                                  <file:lib/express/handlers/data-sheet/instance#get>
+                                                                              ]
                                                                             )
                                                            ]
                                       ] .
