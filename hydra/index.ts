@@ -14,7 +14,7 @@ export default async function () {
 
   const options: Record<string, unknown> = {
     debug: true,
-    sparqlEndpointUrl: env.READ_MODEL_SPARQL_ENDPOINT,
+    sparqlEndpointUrl: env.SPARQL_ENDPOINT,
     sparqlEndpointUpdateUrl: env.SPARQL_UPDATE_ENDPOINT,
     contextHeader: '/context/',
   }
