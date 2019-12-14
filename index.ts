@@ -8,13 +8,14 @@ import { httpProblemMiddleware } from './lib/express/problemDetails'
 import authentication from './lib/express/authentication'
 import { logRequest, logRequestError } from './lib/express/logger'
 import { log, error } from './lib/log'
+import env from './lib/env'
 
 import('./lib/handlers')
 
 program
   .action(() => {
     Promise.resolve().then(async () => {
-      const baseUrl = `${process.env.BASE_URI}`
+      const baseUrl = `${env.BASE_URI}`
       const hydraMiddleware = await import('./hydra')
 
       const app = express()
@@ -33,8 +34,8 @@ program
       app.use(logRequestError)
       app.use(httpProblemMiddleware)
 
-      app.listen((process.env.PORT || new url.URL(baseUrl).port), () => {
-        log(`listening at port ${process.env.PORT}`)
+      app.listen((env.PORT || new url.URL(baseUrl).port), () => {
+        log(`listening at port ${env.PORT}`)
       })
     }).catch(err => {
       error('Failed to start: %O', err)

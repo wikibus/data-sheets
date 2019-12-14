@@ -5,16 +5,17 @@ import { createReadStream } from 'fs'
 import { relative } from 'path'
 import walk from '@fcostarodrigo/walk'
 import { log, warning } from '../lib/log'
+import env from '../lib/env'
 
 export default async function () {
   const parser = new Parser({
-    baseIRI: process.env.BASE_URI,
+    baseIRI: env.BASE_URI,
   })
 
   const options: Record<string, unknown> = {
     debug: true,
-    sparqlEndpointUrl: process.env.READ_MODEL_SPARQL_ENDPOINT,
-    sparqlEndpointUpdateUrl: process.env.SPARQL_UPDATE_ENDPOINT,
+    sparqlEndpointUrl: env.READ_MODEL_SPARQL_ENDPOINT,
+    sparqlEndpointUpdateUrl: env.SPARQL_UPDATE_ENDPOINT,
     contextHeader: '/context/',
   }
 

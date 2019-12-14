@@ -1,5 +1,6 @@
 import { NamedNode } from 'rdf-js'
 import SparqlHttp from 'sparql-http-client'
+import env from '../env'
 
 function buildPrefixes (prefixes: Record<string, (term: string) => NamedNode>) {
   return Object.entries(prefixes)
@@ -29,7 +30,7 @@ export abstract class Builder<T> {
 
   public build () {
     return `
-      BASE <${process.env.BASE_URI}>
+      BASE <${env.BASE_URI}>
       ${buildPrefixes(this.__prefixes)}
       
       ${this._buildQueryInternal()}`

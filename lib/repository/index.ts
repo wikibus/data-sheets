@@ -1,17 +1,20 @@
 import { EventSourcedRepository } from './EventSourceRepository'
 import eventstore from 'eventstore'
 import { DataSheet, DataSheetEntity, DataSheetEvents } from '../domain/data-sheet'
+import env from '../env'
 
 function storeSettings () {
-  if (process.env.STORE_AZURE_ACCOUNT) {
+  if (env.has('STORE_AZURE_ACCOUNT')) {
     return {
       type: 'azuretable',
-      storageAccount: process.env.STORE_AZURE_ACCOUNT,
-      storageTableHost: process.env.STORE_AZURE_TABLE_HOST,
-      storageAccessKey: process.env.STORE_AZURE_ACCESS_KEY,
+      storageAccount: env.STORE_AZURE_ACCOUNT,
+      storageTableHost: env.STORE_AZURE_TABLE_HOST,
+      storageAccessKey: env.STORE_AZURE_ACCESS_KEY,
       eventsTableName: 'factsevents',
     }
   }
+
+  return undefined
 }
 
 const es = eventstore(storeSettings())
