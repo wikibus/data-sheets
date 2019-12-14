@@ -1,8 +1,10 @@
 import { Applicators, EventSourcedEntity, Initializer } from '../EventSourcedEntity'
+import { EventsWithIris } from '../fun-ddr'
 import { Entity } from '@tpluscode/fun-ddr'
 
 export interface DataSheet extends Entity {
   label: string;
+  iri: string;
   rename(label: string): DataSheet;
 }
 
@@ -12,6 +14,10 @@ interface ConstructorParams {
 
 export class DataSheetEntity extends EventSourcedEntity<DataSheetEvents> implements DataSheet {
   private __label: string
+
+  public get iri () {
+    return `data-sheet/${this['@id']}`
+  }
 
   public constructor (init: Initializer & Partial<ConstructorParams>) {
     super(init)
@@ -48,7 +54,7 @@ export class DataSheetEntity extends EventSourcedEntity<DataSheetEvents> impleme
   }
 }
 
-export interface DataSheetEvents {
+interface CoreEvents {
   DataSheetCreated: {
     label: string;
   };
@@ -56,3 +62,5 @@ export interface DataSheetEvents {
     label: string;
   };
 }
+
+export type DataSheetEvents = EventsWithIris<CoreEvents>

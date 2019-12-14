@@ -19,7 +19,7 @@ export const post = asyncMiddleware(async (req: express.Request, res, next) => {
     .commit(dataSheets)
     .then(ds => {
       res.status(201)
-      res.setHeader('Location', `${process.env.BASE_URI}data-sheet/${ds['@id']}`)
+      res.setHeader('Location', `${env.BASE_URI}${ds['@id']}`)
       res.end()
     })
     .catch(next)
