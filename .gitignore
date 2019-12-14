@@ -4,3 +4,4 @@ node_modules/
 .env
 *.hydra.json
 /docker-compose.override.yml
+dist/
