@@ -13,14 +13,12 @@ export const post = asyncMiddleware(async (req: express.Request, res, next) => {
 
   const { dataSheets } = await repo
 
-  createDataSheet({
+  const ds = await createDataSheet({
     label: label.value,
   })
     .commit(dataSheets)
-    .then(ds => {
-      res.status(201)
-      res.setHeader('Location', `${env.BASE_URI}${ds['@id']}`)
-      res.end()
-    })
-    .catch(next)
+
+  res.status(201)
+  res.setHeader('Location', `${env.BASE_URI}${ds.iri}`)
+  next()
 })

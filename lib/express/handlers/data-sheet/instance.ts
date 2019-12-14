@@ -31,7 +31,6 @@ export const put = asyncMiddleware(async (req: Request, res: Response, next) => 
     label: label.value,
   })
     .commit(dataSheets)
-    .catch(next)
 
   next()
 })
