@@ -1,18 +1,29 @@
 language: node_js
-node_js: "12"
+node_js: "13"
 
-env:
-  - FUSEKI_VERSION=3.12.0
+services:
+  docker
 
-before_script:
-  - npm install -g wait-on
-  - curl -s http://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz | tar -xz
-  - ( cd ./apache-jena-fuseki-$FUSEKI_VERSION; ./fuseki-server > /dev/null ) &
-  - wait-on --timeout 30000 http://localhost:3030
-  - "curl 'http://localhost:3030/$/datasets' -H \"Content-Type: application/x-www-form-urlencoded; charset=UTF-8\" --data \"dbName=wikibus-data-sheets&dbType=mem\""
-  - cp .env.defaults .env
-  - npm run start > /dev/null &
-  - wait-on --timeout 40000 http://localhost:12345
+before_install:
+  - sudo apt-get -y update || true
+  - sudo apt-get -y install cgroup-bin curl
+  - curl -fsSL -o /tmp/lando-latest.deb https://github.com/lando/lando/releases/download/v3.0.0-rc.23/lando-v3.0.0-rc.23.deb
+  - sudo dpkg -i /tmp/lando-latest.deb
+  - lando version
 
-script:
-  - npm run test
+jobs:
+  include:
+    - env:
+        - JOB=analyzer
+      before_script:
+        - lando start
+        - npx wait-on --timeout 30000 http://wikibus-sheets.lndo.site
+      script:
+        - docker-compose run analyser
+    - env:
+        - JOB=e2e
+      before_script:
+        - lando start
+        - npx wait-on --timeout 30000 http://wikibus-sheets.lndo.site
+      script:
+        - docker-compose run e2e-tests
