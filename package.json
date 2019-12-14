@@ -23,7 +23,7 @@
   "homepage": "https://github.com/wikibus/data-sheets#readme",
   "dependencies": {
     "@fcostarodrigo/walk": "^4.0.2",
-    "@tpluscode/fun-ddr": "^0.3.1",
+    "@tpluscode/fun-ddr": "^0.5.2",
     "@zazuko/rdf-vocabularies": "^2019.10.22",
     "await-timeout": "^0.6.0",
     "azure-storage": "^2.10.3",
