@@ -1,0 +1,56 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass wikibus:Gearbox ;
+  sh:property
+    [
+      sh:path schema:brand ;
+      sh:minCount 1 ;
+      sh:or
+        (
+          [ sh:class schema:Brand ]
+          [ sh:class schema:Organization ]
+        )
+    ]
+.
+
+<#specification>
+  a sh:NodeShape ;
+  sh:targetClass wikibus:GearboxSpecification ;
+  sh:property
+    [
+      sh:path schema:brand ;
+      sh:or
+        (
+          [ sh:class schema:Brand ]
+          [ sh:class schema:Organization ]
+        )
+    ] ;
+.
+
+<#gearRatio>
+  a sh:NodeShape ;
+  sh:targetNode wikibus:gearRatio ;
+  sh:property
+    [
+      sh:path [ sh:inversePath schema:propertyID ] ;
+      sh:property
+        [
+          sh:message "The gear ratio must be a number." ;
+          sh:path schema:value ;
+          sh:or ( [ sh:datatype xsd:integer ] [ sh:datatype xsd:decimal ] ) ;
+        ] ;
+      sh:property
+        [
+          sh:message "The gear ratio requires gear reference" ;
+          sh:path schema:valueReference ;
+          sh:minCount 1 ;
+          sh:maxCount 1 ;
+          sh:or ( [ sh:datatype xsd:integer ] [ sh:hasValue wikibus:ReverseGear ] ) ;
+        ] ;
+    ] ;
+.

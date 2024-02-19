@@ -1,0 +1,24 @@
+PREFIX schema: <http://schema.org/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass wikibus:Vehicle ;
+  sh:property
+    [
+      sh:path skos:prefLabel ;
+      sh:nodeKind sh:Literal ;
+      sh:minCount 1 ;
+    ],
+    [
+      sh:path schema:brand ;
+      sh:minCount 1 ;
+      sh:or
+        (
+          [ sh:class schema:Brand ]
+          [ sh:class schema:Organization ]
+        )
+    ] ;
+.

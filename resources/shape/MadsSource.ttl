@@ -1,0 +1,12 @@
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass mads:Source ;
+  sh:property
+    [
+      sh:path mads:citationSource ;
+      sh:minCount 1 ;
+    ]
+.

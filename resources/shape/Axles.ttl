@@ -1,0 +1,21 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetObjectsOf wikibus:axle ;
+  sh:class schema:PropertyValue ;
+  sh:property
+    [
+      sh:path schema:value ;
+      sh:minCount 1 ;
+    ],
+    [
+      sh:path schema:position ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:datatype xsd:integer ;
+    ] ;
+.

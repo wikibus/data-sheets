@@ -1,0 +1,26 @@
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX quantitykind: <http://qudt.org/vocab/quantitykind/>
+PREFIX schema: <http://schema.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass schema:QuantitativeValue ;
+  sh:property
+    [
+      sh:deactivated true ;
+      sh:path schema:unitCode ;
+      sh:class qudt:Unit ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:node _:massUnit ;
+    ] ;
+.
+
+_:massUnit
+  sh:property
+    [
+      sh:path qudt:hasQuantityKind ;
+      sh:class quantitykind:Mass ;
+    ] ;
+.

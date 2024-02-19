@@ -1,0 +1,88 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass wikibus:DataSheet ;
+  sh:property
+    [
+      sh:path mads:hasSource ;
+      sh:minCount 1 ;
+      sh:class mads:Source ;
+    ] ,
+    [
+      sh:path wikibus:vehicle ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:class wikibus:Vehicle ;
+    ] ;
+.
+
+<#engine>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:vehicleEngine ;
+  sh:class schema:EngineSpecification ;
+.
+
+<#gearbox>
+  a sh:NodeShape ;
+  sh:targetObjectsOf wikibus:gearbox ;
+  sh:class wikibus:GearboxSpecification ;
+.
+
+<#weight>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:weight ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#numberOfAxles>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:numberOfAxles ;
+  sh:datatype xsd:integer ;
+.
+
+<#weightTotal>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:weightTotal ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#length>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:length ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#width>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:width ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#height>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:height ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#wheelbase>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:wheelbase ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#seatingCapacity>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:seatingCapacity ;
+  sh:class schema:QuantitativeValue ;
+.
+
+<#standingCapacity>
+  a sh:NodeShape ;
+  sh:targetObjectsOf wikibus:standingCapacity ;
+  sh:class schema:QuantitativeValue ;
+.

@@ -1,0 +1,87 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX unit: <http://qudt.org/vocab/unit/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX schema: <http://schema.org/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+<>
+  a sh:NodeShape ;
+  sh:targetClass schema:EngineSpecification, wikibus:Engine ;
+  sh:property
+    [
+      sh:path schema:brand ;
+      sh:minCount 1 ;
+      sh:or
+        (
+          [ sh:class schema:Brand ]
+          [ sh:class schema:Organization ]
+        ) ;
+    ],
+    [
+      sh:path schema:engineDisplacement ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:enginePower ;
+      sh:class schema:QuantitativeValue ;
+      sh:property
+        [
+          sh:path schema:valueReference ;
+          sh:minCount 1 ;
+          sh:class schema:QuantitativeValue ;
+          sh:property
+            [
+              sh:path schema:unitCode ;
+              sh:hasValue unit:REV-PER-MIN ;
+            ] ;
+        ] ;
+    ],
+    [
+      sh:path schema:torque ;
+      sh:class schema:QuantitativeValue ;
+      sh:property
+        [
+          sh:path schema:valueReference ;
+          sh:minCount 1 ;
+          sh:class schema:QuantitativeValue ;
+          sh:property
+            [
+              sh:path schema:unitCode ;
+              sh:hasValue unit:REV-PER-MIN ;
+            ] ;
+        ] ;
+    ],
+    [
+      sh:path schema:fuelType ;
+      sh:in ( wd:Q38423 ) ;
+    ],
+    [
+      sh:path wikibus:enginePlacement ;
+      sh:in ( wikibus:Rear ) ;
+    ] ;
+.
+
+<#EngineSpecification>
+  a sh:NodeShape ;
+  sh:targetClass schema:EngineSpecification ;
+  sh:property
+    [
+      sh:path schema:engineType ;
+      sh:or
+        (
+          [ sh:dataType xsd:string ]
+          [ sh:class wikibus:Engine ]
+        ) ;
+    ] ;
+.
+
+<#Engine>
+  a sh:NodeShape ;
+  sh:targetClass wikibus:Engine ;
+  sh:property
+    [
+      sh:path schema:isVariatOf ;
+      sh:class wikibus:Engine ;
+    ] ;
+.

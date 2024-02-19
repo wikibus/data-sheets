@@ -1,0 +1,9 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibus: <https://schema.wikibus.org/>
+
+<>
+  a wikibus:Engine ;
+  schema:fuelType wd:Q38423 ;
+  schema:brand <brand/man> ;
+.
