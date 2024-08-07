@@ -26,9 +26,11 @@ jobs:
           path: resources
       - run: sudo apt-get update && sudo apt-get install -y raptor2-utils
       - run: npm run validate
+        id: validate
       - run: rapper -i ntriples -o turtle report.nt > report.ttl
+        if: failure()
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: report
           path: report.ttl
