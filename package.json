@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "patch-package",
     "export": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ --variable-all -v",
     "export:one": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocument --variable-all -v",
     "export:file": "b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocumentDirect --variable-all -v",
@@ -21,6 +22,7 @@
     "barnard59-shacl": "^1.4.9",
     "barnard59-sparql": "^2.3.0",
     "dotenv-cli": "^7.4.2",
+    "patch-package": "^8.0.0",
     "stream-json": "^1.8.0"
   },
   "repository": {
