@@ -15,6 +15,10 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
       - run: npm run export -- --output resources/data-sheets.nq
+        env:
+          PROJECT_ID: ${{ vars.PROJECT_ID }}
+          INCEPTION_URL: ${{ vars.INCEPTION_URL }}
+          AUTH: ${{ secrets.AUTH }}
       - run: npx talos print --base https://wikibus.org resources > resources.nq
       - uses: actions/upload-artifact@v4
         with:
