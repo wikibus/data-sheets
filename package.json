@@ -9,7 +9,7 @@
     "export": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ --variable-all -v",
     "export:one": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocument --variable-all -v",
     "export:file": "b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocumentDirect --variable-all -v",
-    "validate": "b59 shacl validate --shapes resources.nq < resources.nq > report.nt"
+    "validate": "b59 shacl validate --shapes resources.nq < resources.nq > report.nq"
   },
   "dependencies": {
     "@hydrofoil/talos": "^0.6.11",
