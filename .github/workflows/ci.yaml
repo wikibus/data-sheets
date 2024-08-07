@@ -22,14 +22,12 @@ jobs:
       - run: npx talos print --base https://wikibus.org resources > resources.nq
       - uses: actions/upload-artifact@v4
         with:
+          name: resources
           path: resources
-      - uses: actions/setup-java@v4
-        with:
-         distribution: temurin
-         java-version: 17 # Jena4 requires Java 11+
       - run: sudo apt-get update && sudo apt-get install -y raptor2-utils
       - run: rapper -i nquads -o turtle resources.nq > report.ttl
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          name: report
           path: report.ttl
