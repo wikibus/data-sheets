@@ -25,7 +25,8 @@ jobs:
           name: resources
           path: resources
       - run: sudo apt-get update && sudo apt-get install -y raptor2-utils
-      - run: rapper -i nquads -o turtle resources.nq > report.ttl
+      - run: npm run validate
+      - run: rapper -i ntriples -o turtle report.nt > report.ttl
       - uses: actions/upload-artifact@v4
         if: always()
         with:
