@@ -1,0 +1,28 @@
+diff --git a/node_modules/barnard59-sparql/inMemory.js b/node_modules/barnard59-sparql/inMemory.js
+index c8efaac..df70832 100644
+--- a/node_modules/barnard59-sparql/inMemory.js
++++ b/node_modules/barnard59-sparql/inMemory.js
+@@ -8,7 +8,10 @@ export const update = sparql =>
+   new Transform({
+     objectMode: true,
+     transform: (chunk, encoding, callback) => {
+-      const store = new oxigraph.Store([...chunk])
++      const store = new oxigraph.Store()
++      for (const quad of chunk) {
++        store.add(quad)
++      }
+       store.update(sparql)
+       callback(null, store.match(undefined, undefined, undefined, undefined))
+     },
+@@ -21,7 +24,10 @@ export const query = sparql =>
+   new Transform({
+     objectMode: true,
+     transform: (chunk, encoding, callback) => {
+-      const store = new oxigraph.Store([...chunk])
++      const store = new oxigraph.Store()
++      for (const quad of chunk) {
++        store.add(quad)
++      }
+       const result = store.query(sparql)
+       callback(null, result)
+     },

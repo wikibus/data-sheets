@@ -1,0 +1,156 @@
+prefix cas: <uima:uima.cas.>
+prefix tcas: <uima:uima.tcas.>
+prefix schema: <http://schema.org/>
+prefix unit: <http://qudt.org/vocab/unit/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+base <https://annotate.wikibus.org/>
+
+CONSTRUCT {
+  ?measureId a schema:PropertyValue ;
+    schema:value ?value ;
+    schema:unitCode ?unit .
+
+  ?vehicleId
+    schema:name ?vehicleSofaText
+  .
+
+  ?gearboxId
+    schema:name ?gearboxText
+  .
+
+  ?engineId
+    a schema:EngineSpecification ;
+    schema:name ?engineText
+  .
+
+  ?quantitativeId
+    a schema:QuantitativeValue ;
+    schema:position ?quantitativePosition
+  .
+
+  ?from ?linkProp ?to .
+}
+where {
+  {
+    # measures
+    ?measure a <uima:webanno.custom.Measure> ;
+      tcas:Annotation-begin ?measureBegin ;
+      tcas:Annotation-end ?measureEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
+
+    OPTIONAL {
+      ?measure <uima:webanno.custom.Measure-Unit> ?unit .
+    }
+    OPTIONAL {
+      ?measure <uima:webanno.custom.Measure-Datatype> ?datatypeText .
+    }
+
+    BIND(IF(!BOUND(?datatypeText), xsd:string, IF(?datatypeText = "Decimal", xsd:decimal, IF(?datatypeText = "Text", xsd:string, xsd:integer))) AS ?datatype)
+
+    OPTIONAL {
+      ?measure <uima:webanno.custom.Measure-Textfix> ?textfix .
+    }
+    BIND(SUBSTR(?sofaString, ?measureBegin + 1, ?measureEnd - ?measureBegin) as ?measureSofaText)
+    BIND(STRDT(COALESCE(?textfix, ?measureSofaText), ?datatype) AS ?value)
+    BIND(iri(concat("urn:bnode:", str(?measureBegin), "-", str(?measureEnd))) as ?measureId)
+  } UNION {
+    # vehicles
+    ?vehicle a <uima:webanno.custom.BusorCoach> ;
+      tcas:Annotation-begin ?vehicleBegin ;
+      tcas:Annotation-end ?vehicleEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
+
+    BIND(SUBSTR(?sofaString, ?vehicleBegin + 1, ?vehicleEnd - ?vehicleBegin) as ?vehicleSofaText)
+    BIND(iri(concat("urn:bnode:", str(?vehicleBegin), "-", str(?vehicleEnd))) as ?vehicleId)
+  } UNION {
+    # engines
+    ?engine a <uima:webanno.custom.Engine> ;
+      tcas:Annotation-begin ?engineBegin ;
+      tcas:Annotation-end ?engineEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
+
+    OPTIONAL {
+      ?engine <uima:webanno.custom.Engine-Textfix> ?textfix .
+    }
+
+    BIND(SUBSTR(?sofaString, ?engineBegin - 1, ?engineEnd - ?engineBegin) as ?engineSofaText)
+    BIND(COALESCE(?textfix, ?engineSofaText) AS ?engineText)
+    BIND(iri(concat("urn:bnode:", str(?engineBegin), "-", str(?engineEnd))) as ?engineId)
+  } UNION {
+    # gearbox
+    ?gearbox a <uima:webanno.custom.Gearbox> ;
+      tcas:Annotation-begin ?gearboxBegin ;
+      tcas:Annotation-end ?gearboxEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
+
+    OPTIONAL {
+      ?gearbox <uima:webanno.custom.Gearbox-Textfix> ?textfix .
+    }
+
+    BIND(SUBSTR(?sofaString, ?gearboxBegin + 1, ?gearboxEnd - ?gearboxBegin) as ?gearboxSofaText)
+    BIND(COALESCE(?textfix, ?gearboxSofaText) AS ?gearboxText)
+    BIND(iri(concat("urn:bnode:", str(?gearboxBegin), "-", str(?gearboxEnd))) as ?gearboxId)
+  } UNION {
+    # links
+    ?link a <uima:webanno.custom.Link> ;
+      <uima:webanno.custom.Link-Governor> ?governor ;
+      <uima:webanno.custom.Link-Dependent> ?dependent ;
+      <uima:webanno.custom.Link-property> ?linkProp .
+
+    ?governor
+      tcas:Annotation-begin ?governorBegin ;
+      tcas:Annotation-end ?governorEnd .
+
+    BIND(iri(concat("urn:bnode:", str(?governorBegin), "-", str(?governorEnd))) as ?from)
+    {
+      # layer links
+      ?dependent
+        tcas:Annotation-begin ?dependentBegin ;
+        tcas:Annotation-end ?dependentEnd .
+
+      FILTER NOT EXISTS {
+        ?dependent a <uima:webanno.custom.Textfragment> .
+      }
+      FILTER NOT EXISTS {
+        ?dependent a <uima:webanno.custom.Entity> .
+      }
+
+      BIND(iri(concat("urn:bnode:", str(?dependentBegin), "-", str(?dependentEnd))) as ?to)
+    } UNION {
+      # text fragment links
+      ?dependent a <uima:webanno.custom.Textfragment> ;
+        tcas:Annotation-begin ?dependentBegin ;
+        tcas:Annotation-end ?dependentEnd .
+
+      OPTIONAL {
+        ?dependent <uima:webanno.custom.Textfragment-Language> ?lang .
+      }
+      OPTIONAL {
+        ?dependent <uima:webanno.custom.Textfragment-Textfix> ?textfix .
+      }
+
+      ?sofa cas:Sofa-sofaString ?sofaString .
+      BIND(SUBSTR(?sofaString, ?dependentBegin + 1, ?dependentEnd - ?dependentBegin) as ?dependentSofaText)
+      BIND(COALESCE(?textfix, ?dependentSofaText) AS ?dependentText)
+      BIND(IF(bound(?lang), strlang(?dependentText, ?lang), ?dependentText) as ?to)
+    } UNION {
+      # entity links
+      ?dependent a <uima:webanno.custom.Entity> ;
+        <uima:webanno.custom.Entity-ID> ?to .
+    }
+  } UNION {
+    # Quantitative values
+    ?quantitative a <uima:webanno.custom.QuantitativeValue> ;
+      tcas:Annotation-begin ?quantitativeBegin ;
+      tcas:Annotation-end ?quantitativeEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
+
+    OPTIONAL {
+      ?quantitative <uima:webanno.custom.QuantitativeValue-position> ?quantitativePosition .
+      FILTER(?quantitativePosition > 0)
+    }
+
+    BIND(SUBSTR(?sofaString, ?quantitativeBegin + 1, ?quantitativeEnd - ?quantitativeBegin) as ?quantitativeSofaText)
+    BIND(iri(concat("urn:bnode:", str(?quantitativeBegin), "-", str(?quantitativeEnd))) as ?quantitativeId)
+  }
+}

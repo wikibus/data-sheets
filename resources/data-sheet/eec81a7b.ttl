@@ -7,7 +7,7 @@ PREFIX wikibus: <https://schema.wikibus.org/>
 
 <>
   a wikibus:DataSheet ;
-  wikibus:vehicle <bus/turkkar/city-angel-ed> ;
+  dcterms:subject <bus/turkkar/city-angel-ed> ;
   mads:hasSource
     [
       a mads:Source ;
@@ -25,7 +25,7 @@ PREFIX wikibus: <https://schema.wikibus.org/>
       schema:value 11374 ;
       schema:unitCode unit:KiloGM ;
     ] ;
-  schema:length
+  wikibus:length
     [
       a schema:QuantitativeValue ;
       schema:value 9000 ;

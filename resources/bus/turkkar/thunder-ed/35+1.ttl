@@ -1,9 +1,10 @@
+PREFIX wikibus: <https://schema.wikibus.org/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX schema: <http://schema.org/>
-PREFIX wikibus: <https://schema.wikibus.org/>
 
 <>
   a schema:ProductModel, wikibus:BusOrCoach, wikibus:Vehicle ;
-  skos:prefLabel "Türkkar City Angel E.D." ;
+  skos:prefLabel "Türkkar Thunder E.D. (35+1)" ;
   schema:brand <company/turkkar> ;
+  schema:isVariantOf <bus/turkkar/thunder-ed> ;
 .

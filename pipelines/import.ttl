@@ -1,0 +1,228 @@
+PREFIX formats: <http://www.w3.org/ns/formats/>
+base <https://annotate.wikibus.org/pipeline/>
+PREFIX code: <https://code.described.at/>
+PREFIX arg: <https://code.described.at/argument#>
+prefix http: <https://barnard59.zazuko.com/operations/http/>
+prefix base: <https://barnard59.zazuko.com/operations/base/>
+prefix formats: <https://barnard59.zazuko.com/operations/formats/>
+prefix sparql: <https://barnard59.zazuko.com/operations/sparql/>
+prefix rdf: <https://barnard59.zazuko.com/operations/rdf/>
+prefix p: <https://pipeline.described.at/>
+
+_:variables
+  p:variable [ p:name "INCEPTION_URL" ] ;
+  p:variable [ p:name "PROJECT_ID" ] ;
+  p:variable
+    [
+      a p:Variable ;
+      p:name "AUTH" ;
+      p:sensitive true
+    ] ;
+.
+
+<>
+  a p:Pipeline, p:Readable ;
+  p:variables _:variables ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            http:get
+              (
+                [
+                  arg:url "${INCEPTION_URL}/api/aero/v1/projects/${PROJECT_ID}/documents"^^code:EcmaScriptTemplateLiteral ;
+                  arg:headers
+                    [
+                      arg:Authorization "Basic ${AUTH}"^^code:EcmaScriptTemplateLiteral
+                    ]
+                ]
+              )
+          ]
+          _:stepJsonBody
+          _:stepStreamArray
+          [
+            base:map ( "doc => doc.value.id"^^code:EcmaScript )
+          ]
+          [
+            base:forEach ( _:ProcessDocument "documentId" )
+          ]
+          [
+            formats:ntriples\/serialize ()
+          ]
+        )
+    ] ;
+.
+
+<ProcessDocument>
+  a p:Pipeline, p:Readable ;
+  p:variables
+    [
+      p:variable
+        [
+          a p:Variable ;
+          p:name "documentId" ;
+          p:value "doc"
+        ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:ProcessDocument
+          [
+            formats:ntriples\/serialize ()
+          ]
+        )
+    ] ;
+.
+
+_:ProcessDocument
+  a p:Pipeline, p:ReadableObjectMode ;
+  p:variables
+    _:variables,
+    [
+      p:variable
+        [
+          p:name "documentId"
+        ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            http:get
+              (
+                [
+                  arg:url "${INCEPTION_URL}/api/aero/v1/projects/${PROJECT_ID}/documents/${documentId}/annotations"^^code:EcmaScriptTemplateLiteral ;
+                  arg:headers
+                    [
+                      arg:Authorization "Basic ${AUTH}"^^code:EcmaScriptTemplateLiteral
+                    ]
+                ]
+              )
+          ]
+          _:stepJsonBody
+          _:stepStreamArray
+          [
+            base:map ( "doc => doc.value.user"^^code:EcmaScript )
+          ]
+          [
+            base:forEach ( _:ProcessDocumentAnnotations "userId" )
+          ]
+        )
+    ] ;
+.
+
+_:ProcessDocumentAnnotations
+  a p:Pipeline, p:ReadableObjectMode ;
+  p:variables
+    _:variables,
+    [
+      p:variable [ p:name "documentId" ] ;
+      p:variable [ p:name "userId" ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            http:get
+              (
+                [
+                  arg:url "${INCEPTION_URL}/api/aero/v1/projects/${PROJECT_ID}/documents/${documentId}/annotations/${userId}?format=rdfcas"^^code:EcmaScriptTemplateLiteral ;
+                  arg:headers
+                    [
+                      arg:Authorization "Basic ${AUTH}"^^code:EcmaScriptTemplateLiteral
+                    ]
+                ]
+              )
+          ]
+          _:ProcessDocumentFinal
+        )
+    ]
+.
+
+<ProcessDocumentDirect>
+  a p:Pipeline, p:Readable ;
+  p:variables
+    [
+      p:variable
+        [
+          a p:Variable ;
+          p:name "documentId" ;
+          p:value "doc"
+        ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            base:stdin ()
+          ]
+          _:ProcessDocumentFinal
+          [
+            formats:ntriples\/serialize ()
+          ]
+        )
+    ] ;
+.
+
+_:ProcessDocumentFinal
+  a p:Pipeline, p:ReadableObjectMode, p:Writable ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            formats:n3\/parse ()
+          ]
+          [
+            rdf:getDataset ()
+          ]
+          [
+            sparql:in-memory\/query ( "../queries/transform-cas.rq"^^p:FileContents )
+          ]
+          [
+            base:flatten ()
+          ]
+          [
+            base:map
+              (
+                """function (quad) {
+                  const documentId = this.variables.get('documentId');
+                  const subject = quad.subject.value.startsWith("urn:bnode:") ? this.env.blankNode(documentId + '-' + quad.subject.value.substr(10)) : quad.subject;
+                  const object = quad.object.value.startsWith("urn:bnode:") ? this.env.blankNode(documentId + '-' + quad.object.value.substr(10)) : quad.object;
+
+                  return this.env.quad(subject, quad.predicate, object);
+                }"""^^code:EcmaScript
+              )
+          ]
+        )
+    ] ;
+.
+
+_:stepJsonBody
+  a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:stream-json/filters/Pick.js#withParser> ;
+    ] ;
+  code:arguments
+    [
+      code:name "filter" ;
+      code:value "body"
+    ] ;
+.
+
+_:stepStreamArray
+  a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:stream-json/streamers/StreamArray.js#streamArray> ;
+    ] ;
+.

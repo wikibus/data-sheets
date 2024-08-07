@@ -1,0 +1,439 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wikibus: <https://schema.wikibus.org/>
+
+wikibus:BusOrCoach
+  rdfs:subClassOf wikibus:Vehicle ;
+.
+
+rdf:Property a rdfs:Class .
+
+wikibus:length
+  a rdfs:Property ;
+  rdfs:label
+    "length"@en,
+    "Länge"@de,
+    "longueur"@fr,
+    "longitud"@es,
+    "comprimento"@pt,
+    "lunghezza"@it,
+    "uzunluk"@tr,
+    "długość"@pl ;
+.
+
+wikibus:axleLoad
+  a rdf:Property ;
+  rdfs:label
+    "axle load"@en,
+    "Achslast"@de,
+    "charge par essieu"@fr,
+    "carga por eje"@es,
+    "carga por eixo"@pt,
+    "carico per asse"@it ;
+  dcterms:relation wd:Q340755 ;
+.
+
+wikibus:chassis
+  a rdf:Property ;
+  rdfs:label
+    "chassis"@en,
+    "Fahrgestell"@de,
+    "châssis"@fr,
+    "chasis"@es,
+    "chassi"@pt,
+    "telaio"@it,
+    "Şasi"@tr,
+    "podwozie"@pl ;
+  dcterms:relation wd:Q731988 ;
+.
+
+wikibus:steering
+  a rdf:Property ;
+  rdfs:label
+    "steering"@en,
+    "Lenkung"@de,
+    "direction"@fr,
+    "dirección"@es,
+    "esterço"@pt,
+    "sterzo"@it,
+    "Direksiyon sistemi"@tr,
+    "Układ kierowniczy"@pl ;
+  dcterms:relation wd:Q18891017 ;
+.
+
+wikibus:wheelTrack
+  a rdf:Property ;
+  rdfs:label
+    "wheel track"@en,
+    "Spurweite"@de,
+    "écartement des roues"@fr,
+    "ancho de vía"@es,
+    "bitola"@pt,
+    "scartamento"@it ;
+  dcterms:relation wd:Q125770 ;
+.
+
+wikibus:cylinderCount
+  a rdf:Property ;
+  rdfs:label
+    "cylinder count"@en,
+    "Zylinderzahl"@de,
+    "nombre de cylindres"@fr,
+    "número de cilindros"@es,
+    "número de cilindros"@pt,
+    "numero di cilindri"@it,
+    "Silindir sayısı"@tr,
+    "liczba cylindrów"@pl ;
+.
+
+wikibus:cylinderDiameter
+  a rdf:Property ;
+  rdfs:label
+    "cylinder diameter"@en,
+    "Zylinderdurchmesser"@de,
+    "diamètre du cylindre"@fr,
+    "diámetro del cilindro"@es,
+    "diâmetro do cilindro"@pt,
+    "diametro del cilindro"@it,
+    "Silindir çapı"@tr,
+    "średnica cylindra"@pl ;
+  dcterms:relation wd:Q245657 ;
+.
+
+wikibus:cylinderStroke
+  a rdf:Property ;
+  rdfs:label
+    "cylinder stroke"@en,
+    "Zylinderhub"@de,
+    "course du cylindre"@fr,
+    "carrera del cilindro"@es,
+    "curso do cilindro"@pt,
+    "corsa del cilindro"@it,
+    "Silindir stroku"@tr ;
+  dcterms:relation wd:Q671554 ;
+.
+
+wikibus:compressionRatio
+  a rdf:Property ;
+  rdfs:label
+    "compression ratio"@en,
+    "Verdichtungsverhältnis"@de,
+    "taux de compression"@fr,
+    "relación de compresión"@es,
+    "relação de compressão"@pt,
+    "rapporto di compressione"@it,
+    "Sıkıştırma oranı"@tr,
+    "stopień sprężania"@pl ;
+  dcterms:relation wd:Q828137 ;
+.
+
+wikibus:idleSpeed
+  a rdf:Property ;
+  rdfs:label
+    "idle speed"@en,
+    "Leerlaufdrehzahl"@de,
+    "régime de ralenti"@fr,
+    "régimen de ralentí"@es,
+    "rotação em vazio"@pt,
+    "regime al minimo"@it,
+    "Boşta çalışma hızı"@tr,
+    "obroty jałowe"@pl ;
+  dcterms:relation wd:Q11392621 ;
+.
+
+wikibus:gearRatio
+  a rdf:Property ;
+  rdfs:label
+    "gear ratio"@en,
+    "Übersetzungsverhältnis"@de,
+    "rapport de transmission"@fr,
+    "relación de transmisión"@es,
+    "relação de transmissão"@pt,
+    "rapporto di trasmissione"@it,
+    "Vites oranı"@tr,
+    "przełożenie"@pl ;
+  dcterms:relation wd:Q2403634 ;
+.
+
+wikibus:differentialRatio
+  a rdf:Property ;
+  rdfs:label
+    "differential ratio"@en,
+    "Achsübersetzung"@de,
+    "rapport de pont"@fr,
+    "relación de diferencial"@es,
+    "relação de diferencial"@pt,
+    "rapporto differenziale"@it,
+    "Diferansiyel oranı"@tr,
+    "przełożenie mostu napędowego"@pl ;
+.
+
+wikibus:emergencyBrake
+  a rdf:Property ;
+  rdfs:label
+    "emergency brake"@en,
+    "Notbremse"@de,
+    "frein d'urgence"@fr,
+    "freno de emergencia"@es,
+    "freio de emergência"@pt,
+    "freno di emergenza"@it,
+    "Acil fren"@tr,
+    "hamulec awaryjny"@pl ;
+  dcterms:relation wd:Q605816 ;
+.
+
+wikibus:suspension
+  a rdf:Property ;
+  rdfs:label
+    "suspension"@en,
+    "Federung"@de,
+    "suspension"@fr,
+    "suspensión"@es,
+    "suspensão"@pt,
+    "sospensione"@it,
+    "Süspansiyon"@tr,
+    "zawieszenie"@pl ;
+  dcterms:relation wd:Q11446 ;
+.
+
+wikibus:tyres
+  a rdf:Property ;
+  rdfs:label
+    "tyres"@en,
+    "Reifen"@de,
+    "pneus"@fr,
+    "neumáticos"@es,
+    "pneus"@pt,
+    "pneumatici"@it,
+    "Lastikler"@tr,
+    "opony"@pl ;
+  dcterms:relation wd:Q169545 ;
+.
+
+wikibus:batteries
+  a rdf:Property ;
+  rdfs:label
+    "batteries"@en,
+    "Batterien"@de,
+    "batteries"@fr,
+    "baterías"@es,
+    "baterias"@pt,
+    "batterie"@it,
+    "Piller"@tr,
+    "akumulatory"@pl ;
+  dcterms:relation wd:Q11446 ;
+.
+
+wikibus:brakeSystem
+  a rdf:Property ;
+  rdfs:label
+    "brake system"@en,
+    "Bremssystem"@de,
+    "système de freinage"@fr,
+    "sistema de frenos"@es,
+    "sistema de freios"@pt,
+    "sistema frenante"@it,
+    "Fren sistemi"@tr,
+    "układ hamulcowy"@pl ;
+  dcterms:relation wd:Q7918429 ;
+.
+
+wikibus:retarder
+  a rdf:Property ;
+  rdfs:label
+    "retarder"@en,
+    "Retarder"@de,
+    "ralentisseur"@fr,
+    "retardador"@es,
+    "retardador"@pt,
+    "ritardatore"@it,
+    "Retarder"@tr,
+    "Retarder"@pl ;
+  dcterms:relation wd:Q1779780 ;
+.
+
+wikibus:EnginePlacement
+  a rdfs:Class ;
+.
+
+wikibus:Rear
+  a wikibus:EnginePlacement ;
+  rdfs:label
+    "rear"@en,
+    "hinten"@de,
+    "arrière"@fr,
+    "trasero"@es,
+    "traseiro"@pt,
+    "posteriore"@it,
+    "arka"@tr,
+    "tył"@pl ;
+.
+
+wikibus:frontOverhang
+  a rdf:Property ;
+  rdfs:label
+    "front overhang"@en,
+    "vorderer Überhang"@de,
+    "porte-à-faux avant"@fr,
+    "voladizo delantero"@es,
+    "balanço dianteiro"@pt,
+    "sbalzo anteriore"@it,
+    "ön uzunluk"@tr,
+    "długość przedniego zwisu"@pl ;
+  dcterms:relation wd:Q3951250 ;
+.
+
+wikibus:rearOverhang
+  a rdf:Property ;
+  rdfs:label
+    "rear overhang"@en,
+    "hinterer Überhang"@de,
+    "porte-à-faux arrière"@fr,
+    "voladizo trasero"@es,
+    "balanço traseiro"@pt,
+    "sbalzo posteriore"@it,
+    "arka uzunluk"@tr,
+    "długość tylnego zwisu"@pl ;
+  dcterms:relation wd:Q3951250 ;
+.
+
+wikibus:angleOfApproach
+  a rdf:Property ;
+  rdfs:label
+    "angle of approach"@en,
+    "Böschungswinkel"@de,
+    "angle d'attaque"@fr,
+    "ángulo de ataque"@es,
+    "ângulo de ataque"@pt,
+    "angolo di attacco"@it,
+    "Yaklaşma açısı"@tr,
+    "kąt natarcia"@pl ;
+  dcterms:relation wd:Q18819631 ;
+.
+
+wikibus:angleOfDeparture
+  a rdf:Property ;
+  rdfs:label
+    "angle of departure"@en,
+    "Böschungswinkel"@de,
+    "angle de fuite"@fr,
+    "ángulo de salida"@es,
+    "ângulo de saída"@pt,
+    "angolo di uscita"@it,
+    "Ayrılma açısı"@tr,
+    "kąt zejścia"@pl ;
+  dcterms:relation wd:Q63258867 ;
+.
+
+wikibus:turningCircle
+  a rdf:Property ;
+  rdfs:label
+    "turning circle"@en,
+    "Wendekreis"@de,
+    "rayon de braquage"@fr,
+    "círculo de giro"@es,
+    "raio de viragem"@pt,
+    "raggio di sterzata"@it,
+    "Dönüş çapı"@tr,
+    "promień skrętu"@pl ;
+  dcterms:relation wd:Q2558948 ;
+.
+
+wikibus:maxClimbGrade
+  a rdf:Property ;
+  rdfs:label
+    "max climb grade"@en,
+    "maximale Steigung"@de,
+    "pente maximale"@fr ;
+.
+
+wikibus:enginePlacement
+  a rdf:Property ;
+  rdfs:label
+    "engine placement"@en,
+    "Motorplatzierung"@de,
+    "emplacement du moteur"@fr,
+    "ubicación del motor"@es,
+    "localização do motor"@pt,
+    "posizione del motore"@it,
+    "Motor yerleşimi"@tr,
+    "umiejscowienie silnika"@pl ;
+.
+
+wikibus:standingCapacity
+  a rdf:Property ;
+  rdfs:label
+    "standing capacity"@en,
+    "Stehplätze"@de,
+    "capacité debout"@fr,
+    "capacidad de pie"@es,
+    "capacidade em pé"@pt,
+    "capacità in piedi"@it,
+    "Ayakta durma kapasitesi"@tr,
+    "liczba miejsc stojących"@pl ;
+.
+
+wikibus:additionalCapacity
+  a rdf:Property ;
+  rdfs:label
+    "additional capacity"@en,
+    "Zusatzkapazität"@de,
+    "capacité supplémentaire"@fr,
+    "capacidad adicional"@es,
+    "capacidade adicional"@pt,
+    "capacità aggiuntiva"@it,
+    "Ek kapasite"@tr,
+    "liczba miejsc dodatkowych"@pl ;
+.
+
+wikibus:length
+  a rdf:Property ;
+  rdfs:label
+    "length"@en,
+    "Länge"@de,
+    "longueur"@fr,
+    "longitud"@es,
+    "comprimento"@pt,
+    "lunghezza"@it,
+    "uzunluk"@tr,
+    "długość"@pl ;
+.
+
+wikibus:minGroundClearance
+  a rdf:Property ;
+  rdfs:label
+    "minimum ground clearance"@en,
+    "minimale Bodenfreiheit"@de,
+    "garde au sol minimale"@fr ;
+  dcterms:relation wd:Q889522 ;
+.
+
+wikibus:gearbox
+  a rdf:Property ;
+  rdf:subPropertyOf schema:vehicleTransmission ;
+  rdfs:label
+    "gearbox"@en,
+    "Getriebe"@de,
+    "boîte de vitesses"@fr,
+    "caja de cambios"@es,
+    "caixa de velocidades"@pt,
+    "cambio"@it,
+    "Vites kutusu"@tr,
+    "skrzynia biegów"@pl ;
+.
+
+wikibus:axle
+  a rdf:Property ;
+  rdfs:label
+    "axle"@en,
+    "Achse"@de,
+    "essieu"@fr,
+    "eje"@es,
+    "eixo"@pt,
+    "asse"@it,
+    "aks"@tr,
+    "oś"@pl ;
+.
