@@ -1,3 +1,8 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX unit: <http://qudt.org/vocab/unit/>
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX quantitykind: <http://qudt.org/vocab/quantitykind/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX schema: <http://schema.org/>
 PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
@@ -12,77 +17,215 @@ PREFIX sh: <http://www.w3.org/ns/shacl#>
       sh:path mads:hasSource ;
       sh:minCount 1 ;
       sh:class mads:Source ;
-    ] ,
+    ],
     [
-      sh:path wikibus:vehicle ;
+      sh:path dcterms:subject ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
-      sh:class wikibus:Vehicle ;
+    # sh:class wikibus:Vehicle ;
+      sh:nodeKind sh:IRI ;
+    ],
+    [
+      sh:path schema:vehicleEngine ;
+      sh:class schema:EngineSpecification ;
+    ],
+    [
+      sh:path wikibus:gearbox ;
+      sh:class wikibus:GearboxSpecification ;
+      sh:node <#gearbox> ;
+    ],
+    [
+      sh:path schema:weight ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:numberOfAxles ;
+      sh:datatype xsd:integer ;
+    ],
+    [
+      sh:path schema:weightTotal ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:length ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:width ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:height ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:wheelbase ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:seatingCapacity ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path wikibus:standingCapacity ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path wikibus:additionalCapacity ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path wikibus:axle ;
+      sh:class schema:QuantitativeValue ;
+      sh:node
+        [
+          sh:property
+            [
+              sh:path schema:position ;
+              sh:minCount 1 ;
+              sh:maxCount 1 ;
+              sh:datatype xsd:integer ;
+            ],
+            [
+              sh:path wikibus:differentialRatio ;
+              sh:maxCount 1 ;
+              sh:class schema:QuantitativeValue ;
+            ]
+        ] ;
+    ],
+    [
+      sh:path mads:hasSource ;
+      sh:class mads:Source ;
+      sh:node
+        [
+          sh:property
+            [
+              sh:path mads:citationSource ;
+              sh:minCount 1 ;
+            ] ;
+        ] ;
     ] ;
+.
+
+<#propertyValue>
+  a sh:NodeShape ;
+  sh:targetClass schema:PropertyValue ;
+.
+
+<#quantativeValue>
+  a sh:NodeShape ;
+  sh:targetClass schema:QuantitativeValue ;
+  sh:property
+    [
+      sh:deactivated true ;
+      sh:path schema:unitCode ;
+      sh:class qudt:Unit ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:node
+        [
+          sh:property
+            [
+              sh:path qudt:hasQuantityKind ;
+              sh:class quantitykind:Mass ;
+            ] ;
+        ] ;
+    ] ;
+.
+
+<#additionalProperty>
+  a sh:NodeShape ;
+  sh:targetObjectsOf schema:additionalProperty ;
+  sh:class schema:PropertyValue ;
 .
 
 <#engine>
   a sh:NodeShape ;
-  sh:targetObjectsOf schema:vehicleEngine ;
-  sh:class schema:EngineSpecification ;
+  sh:targetClass schema:EngineSpecification ;
+  sh:property
+    [
+      sh:path schema:producer ;
+      sh:maxCount 1 ;
+      sh:or
+        (
+          [
+            sh:class schema:Brand ;
+            sh:deactivated true
+          ]
+          [
+            sh:class schema:Organization ;
+            sh:deactivated true
+          ]
+        ) ;
+    ],
+    [
+      sh:path schema:engineDisplacement ;
+      sh:class schema:QuantitativeValue ;
+    ],
+    [
+      sh:path schema:enginePower ;
+      sh:class schema:QuantitativeValue ;
+      sh:property
+        [
+          sh:path schema:valueReference ;
+          sh:maxCount 1 ;
+          sh:class schema:QuantitativeValue ;
+          sh:property
+            [
+              sh:path schema:unitCode ;
+              sh:hasValue unit:REV-PER-MIN ;
+            ] ;
+        ] ;
+    ],
+    [
+      sh:path schema:torque ;
+      sh:class schema:QuantitativeValue ;
+      sh:property
+        [
+          sh:path schema:valueReference ;
+          sh:minCount 1 ;
+          sh:class schema:QuantitativeValue ;
+          sh:property
+            [
+              sh:path schema:unitCode ;
+              sh:hasValue unit:REV-PER-MIN ;
+            ] ;
+        ] ;
+    ],
+    [
+      sh:path schema:fuelType ;
+      sh:in ( wd:Q38423 ) ;
+    ],
+    [
+      sh:path wikibus:enginePlacement ;
+      sh:in ( wikibus:Rear ) ;
+    ] ;
 .
 
 <#gearbox>
   a sh:NodeShape ;
-  sh:targetObjectsOf wikibus:gearbox ;
-  sh:class wikibus:GearboxSpecification ;
-.
-
-<#weight>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:weight ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#numberOfAxles>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:numberOfAxles ;
-  sh:datatype xsd:integer ;
-.
-
-<#weightTotal>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:weightTotal ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#length>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:length ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#width>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:width ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#height>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:height ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#wheelbase>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:wheelbase ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#seatingCapacity>
-  a sh:NodeShape ;
-  sh:targetObjectsOf schema:seatingCapacity ;
-  sh:class schema:QuantitativeValue ;
-.
-
-<#standingCapacity>
-  a sh:NodeShape ;
-  sh:targetObjectsOf wikibus:standingCapacity ;
-  sh:class schema:QuantitativeValue ;
+  sh:property
+    [
+      sh:path wikibus:gearRatio ;
+      sh:class schema:QuantitativeValue ;
+      sh:node
+        [
+          sh:property
+            [
+              sh:message "The gear ratio requires gear reference" ;
+              sh:path schema:valueReference ;
+              sh:class schema:QuantitativeValue ;
+              sh:minCount 1 ;
+              sh:maxCount 1 ;
+              sh:node
+                [
+                  sh:property
+                    [
+                      sh:path schema:value ;
+                      sh:or ( [ sh:datatype xsd:integer ] [ sh:in (wd:Q2203464 wd:Q38553397) ] ) ;
+                    ] ;
+                ] ;
+            ] ;
+        ] ;
+    ] ;
 .
