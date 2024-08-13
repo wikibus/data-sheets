@@ -42,6 +42,9 @@ _:variables
           _:stepJsonBody
           _:stepStreamArray
           [
+            base:filter ( "doc => ['ANNOTATION-COMPLETE', 'CURATION-IN-PROGRESS', 'CURATION-COMPLETE'].includes(doc.value.state)"^^code:EcmaScript )
+          ]
+          [
             base:map ( "doc => doc.value.id"^^code:EcmaScript )
           ]
           [
