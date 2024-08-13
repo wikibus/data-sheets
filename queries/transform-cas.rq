@@ -1,20 +1,30 @@
 prefix cas: <uima:uima.cas.>
 prefix tcas: <uima:uima.tcas.>
 prefix schema: <http://schema.org/>
-prefix unit: <http://qudt.org/vocab/unit/>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX wikibus: <https://schema.wikibus.org/>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
 base <https://annotate.wikibus.org/>
 
 CONSTRUCT {
-  ?measureId a schema:PropertyValue ;
+  ?measureId a schema:QuantitativeValue ;
     schema:value ?value ;
     schema:unitCode ?unit .
 
-  ?vehicleId
-    schema:name ?vehicleSofaText
+  ?dataSheetId
+    a wikibus:DataSheet ;
+    schema:name ?vehicleSofaText ;
+    dcterms:subject ?wikibusVehicleId ;
+    mads:hasSource ?dataSheetSourceId .
+
+  ?dataSheetSourceId
+    a mads:Source ;
+    mads:citationSource ?brochureUri
   .
 
   ?gearboxId
+    a wikibus:GearboxSpecification ;
     schema:name ?gearboxText
   .
 
@@ -26,6 +36,11 @@ CONSTRUCT {
   ?quantitativeId
     a schema:QuantitativeValue ;
     schema:position ?quantitativePosition
+  .
+
+  ?entityId
+    a schema:PropertyValue ;
+    schema:value ?entityText
   .
 
   ?from ?linkProp ?to .
@@ -45,7 +60,11 @@ where {
       ?measure <uima:webanno.custom.Measure-Datatype> ?datatypeText .
     }
 
-    BIND(IF(!BOUND(?datatypeText), xsd:string, IF(?datatypeText = "Decimal", xsd:decimal, IF(?datatypeText = "Text", xsd:string, xsd:integer))) AS ?datatype)
+    BIND(
+      IF(!BOUND(?datatypeText), xsd:string, IF(?datatypeText = "Decimal", xsd:decimal, IF(
+                                                                                         ?datatypeText = "Text", xsd:string, xsd:integer)))
+      AS ?datatype
+    )
 
     OPTIONAL {
       ?measure <uima:webanno.custom.Measure-Textfix> ?textfix .
@@ -57,11 +76,20 @@ where {
     # vehicles
     ?vehicle a <uima:webanno.custom.BusorCoach> ;
       tcas:Annotation-begin ?vehicleBegin ;
-      tcas:Annotation-end ?vehicleEnd .
+      tcas:Annotation-end ?vehicleEnd ;
+      <uima:webanno.custom.BusorCoach-id> ?wikibusVehicleId .
     ?sofa cas:Sofa-sofaString ?sofaString .
 
+    ?meta a <uima:webanno.custom.Brochure> ;
+      <uima:webanno.custom.Brochure-id> ?brochureId .
+
+    BIND(iri(concat("https://new.wikibus.org/brochure/", str(?brochureId))) as ?brochureUri)
     BIND(SUBSTR(?sofaString, ?vehicleBegin + 1, ?vehicleEnd - ?vehicleBegin) as ?vehicleSofaText)
-    BIND(iri(concat("urn:bnode:", str(?vehicleBegin), "-", str(?vehicleEnd))) as ?vehicleId)
+    BIND(
+      iri(concat("https://new.wikibus.org/data-sheet/", str(?brochureId), "/", str(?vehicleBegin), "-", str(?vehicleEnd)))
+      as ?dataSheetId
+    )
+    BIND(bnode(concat("urn:bnode:brochure-", str(?brochureId))) as ?dataSheetSourceId)
   } UNION {
     # engines
     ?engine a <uima:webanno.custom.Engine> ;
@@ -97,11 +125,31 @@ where {
       <uima:webanno.custom.Link-Dependent> ?dependent ;
       <uima:webanno.custom.Link-property> ?linkProp .
 
-    ?governor
-      tcas:Annotation-begin ?governorBegin ;
-      tcas:Annotation-end ?governorEnd .
+    {
+      ?governor
+        tcas:Annotation-begin ?governorBegin ;
+        tcas:Annotation-end ?governorEnd .
 
-    BIND(iri(concat("urn:bnode:", str(?governorBegin), "-", str(?governorEnd))) as ?from)
+      FILTER NOT EXISTS {
+        ?governor a <uima:webanno.custom.BusorCoach> .
+      }
+
+      BIND(iri(concat("urn:bnode:", str(?governorBegin), "-", str(?governorEnd))) as ?from)
+    } UNION {
+      ?governor
+        a <uima:webanno.custom.BusorCoach> ;
+        tcas:Annotation-begin ?governorBegin ;
+        tcas:Annotation-end ?governorEnd .
+
+      ?meta a <uima:webanno.custom.Brochure> ;
+        <uima:webanno.custom.Brochure-id> ?brochureId .
+
+      BIND(
+        iri(concat("https://new.wikibus.org/data-sheet/", str(?brochureId), "/", str(?governorBegin), "-", str(?governorEnd)))
+        as ?from
+      )
+    }
+
     {
       # layer links
       ?dependent
@@ -112,7 +160,7 @@ where {
         ?dependent a <uima:webanno.custom.Textfragment> .
       }
       FILTER NOT EXISTS {
-        ?dependent a <uima:webanno.custom.Entity> .
+        ?dependent a <uima:webanno.custom.Entity> ; <uima:webanno.custom.Entity-ID> [] .
       }
 
       BIND(iri(concat("urn:bnode:", str(?dependentBegin), "-", str(?dependentEnd))) as ?to)
@@ -147,10 +195,27 @@ where {
 
     OPTIONAL {
       ?quantitative <uima:webanno.custom.QuantitativeValue-position> ?quantitativePosition .
-      FILTER(?quantitativePosition > 0)
+      FILTER (?quantitativePosition > 0)
     }
 
     BIND(SUBSTR(?sofaString, ?quantitativeBegin + 1, ?quantitativeEnd - ?quantitativeBegin) as ?quantitativeSofaText)
     BIND(iri(concat("urn:bnode:", str(?quantitativeBegin), "-", str(?quantitativeEnd))) as ?quantitativeId)
+  } UNION {
+      # enties
+      ?entity a <uima:webanno.custom.Entity> ;
+        tcas:Annotation-begin ?entityBegin ;
+        tcas:Annotation-end ?entityEnd .
+      ?sofa cas:Sofa-sofaString ?sofaString .
+
+      FILTER NOT EXISTS {
+        ?entity <uima:webanno.custom.Entity-ID> [] .
+      }
+      OPTIONAL {
+        ?entity <uima:webanno.custom.Entity-Textfix> ?textfix .
+      }
+
+      BIND(SUBSTR(?sofaString, ?entityBegin + 1, ?entityEnd - ?entityBegin) as ?entitySofaText)
+      BIND(COALESCE(?textfix, ?entitySofaText) as ?entityText)
+      BIND(iri(concat("urn:bnode:", str(?entityBegin), "-", str(?entityEnd))) as ?entityId)
   }
 }
