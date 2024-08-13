@@ -1,7 +1,0 @@
-PREFIX schema: <http://schema.org/>
-PREFIX wikibus: <https://schema.wikibus.org/>
-
-<>
-  a wikibus:Gearbox ;
-  schema:brand <brand/ZF> ;
-.
