@@ -189,6 +189,12 @@ _:ProcessDocumentFinal
             sparql:in-memory\/query ( "../queries/transform-cas.rq"^^p:FileContents )
           ]
           [
+            sparql:in-memory\/update ( "../queries/expand-property-values.ru"^^p:FileContents )
+          ]
+          [
+            sparql:in-memory\/update ( "../queries/collapse-nested-quantitative-values.ru"^^p:FileContents )
+          ]
+          [
             base:flatten ()
           ]
           [

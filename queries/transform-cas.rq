@@ -14,7 +14,7 @@ CONSTRUCT {
 
   ?dataSheetId
     a wikibus:DataSheet ;
-    schema:name ?vehicleSofaText ;
+    schema:name ?vehicleText ;
     dcterms:subject ?wikibusVehicleId ;
     mads:hasSource ?dataSheetSourceId .
 
@@ -34,8 +34,9 @@ CONSTRUCT {
   .
 
   ?quantitativeId
-    a schema:QuantitativeValue ;
-    schema:position ?quantitativePosition
+    a ?quantitativeType ;
+    schema:position ?quantitativePosition ;
+    schema:name ?quantitativeSofaText ;
   .
 
   ?entityId
@@ -52,6 +53,12 @@ where {
       tcas:Annotation-begin ?measureBegin ;
       tcas:Annotation-end ?measureEnd .
     ?sofa cas:Sofa-sofaString ?sofaString .
+
+    FILTER EXISTS {
+      [] a <uima:webanno.custom.Link> ;
+        <uima:webanno.custom.Link-Dependent> ?measure  ;
+        <uima:webanno.custom.Link-property> [] .
+    }
 
     OPTIONAL {
       ?measure <uima:webanno.custom.Measure-Unit> ?unit .
@@ -76,15 +83,22 @@ where {
     # vehicles
     ?vehicle a <uima:webanno.custom.BusorCoach> ;
       tcas:Annotation-begin ?vehicleBegin ;
-      tcas:Annotation-end ?vehicleEnd ;
-      <uima:webanno.custom.BusorCoach-id> ?wikibusVehicleId .
+      tcas:Annotation-end ?vehicleEnd .
     ?sofa cas:Sofa-sofaString ?sofaString .
+
+    OPTIONAL {
+      ?vehicle <uima:webanno.custom.BusorCoach-id> ?wikibusVehicleId
+    }
+    OPTIONAL {
+      ?measure <uima:webanno.custom.BusorCoach-Textfix> ?vehicleTextfix .
+    }
 
     ?meta a <uima:webanno.custom.Brochure> ;
       <uima:webanno.custom.Brochure-id> ?brochureId .
 
     BIND(iri(concat("https://new.wikibus.org/brochure/", str(?brochureId))) as ?brochureUri)
     BIND(SUBSTR(?sofaString, ?vehicleBegin + 1, ?vehicleEnd - ?vehicleBegin) as ?vehicleSofaText)
+    BIND(COALESCE(?vehicleTextfix, ?vehicleSofaText) as ?vehicleText)
     BIND(
       iri(concat("https://new.wikibus.org/data-sheet/", str(?brochureId), "/", str(?vehicleBegin), "-", str(?vehicleEnd)))
       as ?dataSheetId
@@ -101,7 +115,7 @@ where {
       ?engine <uima:webanno.custom.Engine-Textfix> ?textfix .
     }
 
-    BIND(SUBSTR(?sofaString, ?engineBegin - 1, ?engineEnd - ?engineBegin) as ?engineSofaText)
+    BIND(SUBSTR(?sofaString, ?engineBegin + 1, ?engineEnd - ?engineBegin) as ?engineSofaText)
     BIND(COALESCE(?textfix, ?engineSofaText) AS ?engineText)
     BIND(iri(concat("urn:bnode:", str(?engineBegin), "-", str(?engineEnd))) as ?engineId)
   } UNION {
@@ -160,7 +174,8 @@ where {
         ?dependent a <uima:webanno.custom.Textfragment> .
       }
       FILTER NOT EXISTS {
-        ?dependent a <uima:webanno.custom.Entity> ; <uima:webanno.custom.Entity-ID> [] .
+        ?dependent a <uima:webanno.custom.Entity> ;
+          <uima:webanno.custom.Entity-ID> [] .
       }
 
       BIND(iri(concat("urn:bnode:", str(?dependentBegin), "-", str(?dependentEnd))) as ?to)
@@ -198,24 +213,34 @@ where {
       FILTER (?quantitativePosition > 0)
     }
 
+    OPTIONAL {
+      BIND(schema:PropertyValue as ?quantitativeIsPropertyValue)
+      FILTER EXISTS {
+        ?link a <uima:webanno.custom.Link> ;
+          <uima:webanno.custom.Link-Dependent> ?quantitative ;
+          <uima:webanno.custom.Link-property> schema:additionalProperty .
+      }
+    }
+
+    BIND(COALESCE(?quantitativeIsPropertyValue, schema:QuantitativeValue) as ?quantitativeType)
     BIND(SUBSTR(?sofaString, ?quantitativeBegin + 1, ?quantitativeEnd - ?quantitativeBegin) as ?quantitativeSofaText)
     BIND(iri(concat("urn:bnode:", str(?quantitativeBegin), "-", str(?quantitativeEnd))) as ?quantitativeId)
   } UNION {
-      # enties
-      ?entity a <uima:webanno.custom.Entity> ;
-        tcas:Annotation-begin ?entityBegin ;
-        tcas:Annotation-end ?entityEnd .
-      ?sofa cas:Sofa-sofaString ?sofaString .
+    # enties
+    ?entity a <uima:webanno.custom.Entity> ;
+      tcas:Annotation-begin ?entityBegin ;
+      tcas:Annotation-end ?entityEnd .
+    ?sofa cas:Sofa-sofaString ?sofaString .
 
-      FILTER NOT EXISTS {
-        ?entity <uima:webanno.custom.Entity-ID> [] .
-      }
-      OPTIONAL {
-        ?entity <uima:webanno.custom.Entity-Textfix> ?textfix .
-      }
+    FILTER NOT EXISTS {
+      ?entity <uima:webanno.custom.Entity-ID> [] .
+    }
+    OPTIONAL {
+      ?entity <uima:webanno.custom.Entity-Textfix> ?textfix .
+    }
 
-      BIND(SUBSTR(?sofaString, ?entityBegin + 1, ?entityEnd - ?entityBegin) as ?entitySofaText)
-      BIND(COALESCE(?textfix, ?entitySofaText) as ?entityText)
-      BIND(iri(concat("urn:bnode:", str(?entityBegin), "-", str(?entityEnd))) as ?entityId)
+    BIND(SUBSTR(?sofaString, ?entityBegin + 1, ?entityEnd - ?entityBegin) as ?entitySofaText)
+    BIND(COALESCE(?textfix, ?entitySofaText) as ?entityText)
+    BIND(iri(concat("urn:bnode:", str(?entityBegin), "-", str(?entityEnd))) as ?entityId)
   }
 }

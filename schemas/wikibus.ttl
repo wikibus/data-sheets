@@ -328,6 +328,45 @@ wikibus:angleOfDeparture
   dcterms:relation wd:Q63258867 ;
 .
 
+wikibus:adBlueTankCapacity
+  a rdf:Property ;
+  rdfs:label
+    "AdBlue tank capacity"@en,
+    "AdBlue-Tankkapazität"@de,
+    "capacité du réservoir AdBlue"@fr,
+    "capacidad del depósito AdBlue"@es,
+    "capacidade do tanque AdBlue"@pt,
+    "capacità del serbatoio AdBlue"@it,
+    "AdBlue tank kapasitesi"@tr,
+    "pojemność zbiornika AdBlue"@pl ;
+.
+
+wikibus:floorHeight
+  a rdf:Property ;
+  rdfs:label
+    "floor height"@en,
+    "Einstiegshöhe"@de,
+    "hauteur du plancher"@fr,
+    "altura del suelo"@es,
+    "altura do piso"@pt,
+    "altezza del pavimento"@it,
+    "Zemin yüksekliği"@tr,
+    "wysokość podłogi"@pl ;
+.
+
+wikibus:seatPitch
+  a rdf:Property ;
+  rdfs:label
+    "seat pitch"@en,
+    "Sitzabstand"@de,
+    "espacement des sièges"@fr,
+    "distancia entre asientos"@es,
+    "distância entre assentos"@pt,
+    "passo del sedile"@it,
+    "Koltuk aralığı"@tr,
+    "rozstaw siedzeń"@pl ;
+.
+
 wikibus:turningCircle
   a rdf:Property ;
   rdfs:label
@@ -387,6 +426,19 @@ wikibus:additionalCapacity
     "capacità aggiuntiva"@it,
     "Ek kapasite"@tr,
     "liczba miejsc dodatkowych"@pl ;
+.
+
+wikibus:totalCapacity
+  a rdf:Property ;
+  rdfs:label
+    "total capacity"@en,
+    "Gesamtkapazität"@de,
+    "capacité totale"@fr,
+    "capacidad total"@es,
+    "capacidade total"@pt,
+    "capacità totale"@it,
+    "Toplam kapasite"@tr,
+    "łączna liczba miejsc"@pl ;
 .
 
 wikibus:length
