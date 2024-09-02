@@ -14,17 +14,16 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
-      - run: npm run export -- --output resources/data-sheets.nq
+      - run: npm run export
         env:
           PROJECT_ID: ${{ vars.PROJECT_ID }}
           INCEPTION_URL: ${{ vars.INCEPTION_URL }}
           AUTH: ${{ secrets.AUTH }}
-      - run: npx talos print --base https://wikibus.org resources > resources.nq
       - uses: actions/upload-artifact@v4
         with:
           name: resources
           path: resources
-      - run: npm run validate
+      - run: npm run validate > report.nq
         id: validate
       - uses: actions/setup-python@v5
         with:

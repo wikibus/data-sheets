@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "postinstall": "patch-package",
-    "export": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ --variable-all -v",
+    "export": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ --variable-all -v --output resources/data-sheets.nt",
     "export:one": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocument --variable-all -v",
     "export:file": "b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocumentDirect --variable-all -v",
-    "validate": "b59 shacl validate --shapes resources.nq < resources.nq > report.nq"
+    "resources": "talos print --base https://wikibus.org resources",
+    "validate": "npm -s run resources | b59 shacl validate"
   },
   "dependencies": {
     "@hydrofoil/talos": "^0.6.11",
@@ -19,7 +20,7 @@
     "barnard59-formats": "^4.0.0",
     "barnard59-http": "^2.0.0",
     "barnard59-rdf": "^3.4.0",
-    "barnard59-shacl": "^1.4.9",
+    "barnard59-shacl": "^1.4.10",
     "barnard59-sparql": "^2.3.0",
     "dotenv-cli": "^7.4.2",
     "patch-package": "^8.0.0",

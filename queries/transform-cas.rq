@@ -40,7 +40,7 @@ CONSTRUCT {
   .
 
   ?entityId
-    a schema:PropertyValue ;
+    a schema:QuantitativeValue ;
     schema:value ?entityText
   .
 
