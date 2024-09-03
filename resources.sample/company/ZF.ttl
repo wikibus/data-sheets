@@ -1,4 +1,0 @@
-PREFIX schema: <http://schema.org/>
-<>
-  a schema:Organization ;
-.

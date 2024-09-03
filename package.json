@@ -10,7 +10,7 @@
     "export:one": "dotenv -- b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocument --variable-all -v",
     "export:file": "b59 run pipelines/import.ttl --pipeline https://annotate.wikibus.org/pipeline/ProcessDocumentDirect --variable-all -v",
     "resources": "talos print --base https://wikibus.org resources",
-    "validate": "npm -s run resources | b59 shacl validate"
+    "validate": "npm -s run resources | b59 shacl validate --shapes shape/DataSheet.ttl"
   },
   "dependencies": {
     "@hydrofoil/talos": "^0.6.11",
