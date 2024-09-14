@@ -77,7 +77,8 @@ where {
       ?measure <uima:webanno.custom.Measure-Textfix> ?textfix .
     }
     BIND(SUBSTR(?sofaString, ?measureBegin + 1, ?measureEnd - ?measureBegin) as ?measureSofaText)
-    BIND(STRDT(COALESCE(?textfix, ?measureSofaText), ?datatype) AS ?value)
+    BIND(COALESCE(?textfix, ?measureSofaText) as ?valueLiteral)
+    BIND(STRDT(IF(?datatype = xsd:string, ?valueLiteral, REPLACE(?valueLiteral, "\\s", "")), ?datatype) AS ?value)
     BIND(iri(concat("urn:bnode:", str(?measureBegin), "-", str(?measureEnd))) as ?measureId)
   } UNION {
     # vehicles

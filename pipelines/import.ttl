@@ -134,7 +134,8 @@ _:ProcessDocumentAnnotations
             http:get
               (
                 [
-                  arg:url "${INCEPTION_URL}/api/aero/v1/projects/${PROJECT_ID}/documents/${documentId}/annotations/${userId}?format=rdfcas"^^code:EcmaScriptTemplateLiteral ;
+                  arg:url
+                    "${INCEPTION_URL}/api/aero/v1/projects/${PROJECT_ID}/documents/${documentId}/annotations/${userId}?format=rdfcas"^^code:EcmaScriptTemplateLiteral ;
                   arg:headers
                     [
                       arg:Authorization "Basic ${AUTH}"^^code:EcmaScriptTemplateLiteral
@@ -191,23 +192,29 @@ _:ProcessDocumentFinal
           [
             sparql:in-memory\/update ( "../queries/expand-property-values.ru"^^p:FileContents )
           ]
+        # [
+        #   sparql:in-memory\/update ( "../queries/collapse-nested-quantitative-values.ru"^^p:FileContents )
+        # ]
           [
-            sparql:in-memory\/update ( "../queries/collapse-nested-quantitative-values.ru"^^p:FileContents )
-          ]
-          [
-            base:flatten ()
+            base:map
+              (
+                [
+                  a code:EcmaScriptModule ;
+                  code:link <file:../lib/replaceBlankNodes.js#default> ;
+                ]
+              )
           ]
           [
             base:map
               (
-                """function (quad) {
-                  const documentId = this.variables.get('documentId');
-                  const subject = quad.subject.value.startsWith("urn:bnode:") ? this.env.blankNode(documentId + '-' + quad.subject.value.substr(10)) : quad.subject;
-                  const object = quad.object.value.startsWith("urn:bnode:") ? this.env.blankNode(documentId + '-' + quad.object.value.substr(10)) : quad.object;
-
-                  return this.env.quad(subject, quad.predicate, object);
-                }"""^^code:EcmaScript
+                [
+                  a code:EcmaScriptModule ;
+                  code:link <file:../lib/shacl.js#chunkIsValid> ;
+                ]
               )
+          ]
+          [
+            base:flatten ()
           ]
         )
     ] ;

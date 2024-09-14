@@ -21,19 +21,5 @@ jobs:
           AUTH: ${{ secrets.AUTH }}
       - uses: actions/upload-artifact@v4
         with:
-          name: resources
-          path: resources
-      - run: npm run validate > report.nq
-        id: validate
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3'
-      - run: pip install rdflib
-        if: failure()
-      - run: rdfpipe -i nquads -o trig report.nq > report.trig
-        if: failure()
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: report
-          path: report.trig
+          name: data-sheets
+          path: output
