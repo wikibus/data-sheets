@@ -15,6 +15,8 @@ export async function chunkIsValid(this: Context, chunk: Quad[]): Promise<Iterab
     return chunk
   } else {
     this.error(new Error('Some data sheets failed validation'));
+    const results = report.results.length;
+    this.logger.warn(`Document ${documentId}: ${results} validation issues found`)
     return [...report.dataset, ...chunk].map(renameReportQuad(documentId));
   }
 }

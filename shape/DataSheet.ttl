@@ -8,6 +8,7 @@ PREFIX schema: <http://schema.org/>
 PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
 PREFIX wikibus: <https://schema.wikibus.org/>
 PREFIX sh: <http://www.w3.org/ns/shacl#>
+BASE <https://wikibus.org/shapes/DataSheet>
 
 <>
   a sh:NodeShape ;
@@ -131,6 +132,29 @@ PREFIX sh: <http://www.w3.org/ns/shacl#>
             ] ;
         ] ;
     ] ;
+  sh:node <#valueOrMinMax> ;
+.
+
+<#valueOrMinMax>
+  sh:message "Either value or min/max should be present but not both" ;
+  sh:xone
+    (
+        [
+          sh:property [ sh:path schema:value ; sh:maxCount 1 ; sh:minCount 1 ] ;
+          sh:property [ sh:path schema:minValue ; sh:maxCount 0 ] ;
+          sh:property [ sh:path schema:maxValue ; sh:maxCount 0 ] ;
+        ]
+        [
+          sh:property [ sh:path schema:value ; sh:maxCount 0 ] ;
+          sh:property [ sh:path schema:minValue ; sh:maxCount 1 ; sh:minCount 1 ] ;
+          sh:property [ sh:path schema:maxValue ; sh:maxCount 1 ; sh:minCount 1 ] ;
+        ]
+        [
+          sh:property [ sh:path schema:value ; sh:maxCount 0 ] ;
+          sh:property [ sh:path schema:minValue ; sh:maxCount 0 ] ;
+          sh:property [ sh:path schema:maxValue ; sh:maxCount 0 ] ;
+        ]
+    ) ;
 .
 
 <#additionalProperty>
@@ -183,7 +207,7 @@ PREFIX sh: <http://www.w3.org/ns/shacl#>
       sh:property
         [
           sh:path schema:valueReference ;
-          sh:minCount 1 ;
+          sh:maxCount 1 ;
           sh:class schema:QuantitativeValue ;
           sh:property
             [
@@ -222,7 +246,7 @@ PREFIX sh: <http://www.w3.org/ns/shacl#>
                   sh:property
                     [
                       sh:path schema:value ;
-                      sh:or ( [ sh:datatype xsd:integer ] [ sh:in (wd:Q2203464 wd:Q38553397) ] ) ;
+                      sh:or ( [ sh:datatype xsd:integer ] [ sh:in ( wd:Q2203464 wd:Q38553397 ) ] ) ;
                     ] ;
                 ] ;
             ] ;

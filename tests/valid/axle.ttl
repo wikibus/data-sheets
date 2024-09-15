@@ -1,0 +1,36 @@
+@prefix schema: <http://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix wikibus: <https://schema.wikibus.org/> .
+@prefix wb: <http://www.wikidata.org/entity/> .
+
+<https://new.wikibus.org/data-sheet/5552/495-504> a wikibus:DataSheet ;
+  dcterms:subject <https://new.wikibus.org/vehicle/adl/alexander-dennis-enviro-500> ;
+  mads:hasSource
+    [
+      rdf:type mads:Source ;
+      mads:citationSource <https://new.wikibus.org/brochure/5552> ;
+    ] ;
+  wikibus:axle
+    [
+      schema:additionalProperty
+        [
+          schema:value "disc brakes" ;
+          rdf:type schema:PropertyValue ;
+        ] ;
+      rdf:type schema:QuantitativeValue ;
+      schema:name "AV132/90" ;
+      schema:position 2 ;
+      schema:brand wb:Q136119 ;
+      wikibus:axleLoad
+        [
+          schema:value 11500 ;
+          rdf:type schema:QuantitativeValue ;
+          schema:unitCode unit:KiloGM ;
+        ] ;
+      schema:description "dropped centre" ;
+      schema:disambiguatingDescription "Drive axle" ;
+    ] .
+
