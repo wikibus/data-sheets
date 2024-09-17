@@ -6,3 +6,4 @@ report.nt
 report.nq
 output/
 cas/
+tests/**/*.log
