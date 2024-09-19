@@ -22,6 +22,7 @@ jobs:
           INCEPTION_URL: ${{ vars.INCEPTION_URL }}
           AUTH: ${{ secrets.AUTH }}
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: data-sheets
           path: output
