@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
+      - run: mkdir -p output
       - run: npm run export:one -- --output output/document-${{ github.event.inputs.document_id }}.nt --variable documentId=${{ github.event.inputs.document_id }}
         env:
           PROJECT_ID: ${{ vars.PROJECT_ID }}
