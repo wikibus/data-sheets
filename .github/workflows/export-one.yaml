@@ -1,0 +1,26 @@
+name: Export one
+
+on:
+  workflow_dispatch:
+    inputs:
+      document_id:
+        required: true
+
+jobs:
+  export-annotations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+      - run: npm run export:one -- --output output/document-${{ github.event.inputs.document_id }}.nt --variable documentId=${{ github.event.inputs.document_id }}
+        env:
+          PROJECT_ID: ${{ vars.PROJECT_ID }}
+          INCEPTION_URL: ${{ vars.INCEPTION_URL }}
+          AUTH: ${{ secrets.AUTH }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-sheets
+          path: output
