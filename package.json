@@ -15,7 +15,8 @@
   "dependencies": {
     "@hydrofoil/talos": "^0.6.11",
     "@zazuko/env-node": "^2.1.1",
-    "@zazuko/shacl-test": "github:zazuko/shacl-test",
+    "@zazuko/shacl-playground": "^3.0.0",
+    "@zazuko/shacl-test": "^0.1.1",
     "barnard59": "^5.0.4",
     "barnard59-base": "^2.4.2",
     "barnard59-formats": "^4.0.0",
