@@ -192,6 +192,9 @@ _:ProcessDocumentFinal
           [
             sparql:in-memory\/update ( "../queries/expand-property-values.ru"^^p:FileContents )
           ]
+          [
+            sparql:in-memory\/update ( "../queries/combine-minmax-quantitative-values.ru"^^p:FileContents )
+          ]
         # [
         #   sparql:in-memory\/update ( "../queries/collapse-nested-quantitative-values.ru"^^p:FileContents )
         # ]

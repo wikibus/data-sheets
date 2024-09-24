@@ -9,7 +9,7 @@ base <https://annotate.wikibus.org/>
 
 CONSTRUCT {
   ?measureId a schema:QuantitativeValue ;
-    schema:value ?value ;
+    ?valueProp ?value ;
     schema:unitCode ?unit .
 
   ?dataSheetId
@@ -59,6 +59,11 @@ where {
         <uima:webanno.custom.Link-Dependent> ?measure  ;
         <uima:webanno.custom.Link-property> [] .
     }
+
+    OPTIONAL {
+      ?measure <uima:webanno.custom.Measure-Valuetype> ?annotatedValueProp .
+    }
+    BIND(COALESCE(IRI(CONCAT(str(schema:), ?annotatedValueProp)), schema:value) as ?valueProp)
 
     OPTIONAL {
       ?measure <uima:webanno.custom.Measure-Unit> ?unit .
