@@ -118,44 +118,54 @@ BASE <https://wikibus.org/shapes/DataSheet>
   sh:targetClass schema:QuantitativeValue ;
   sh:property
     [
-      sh:deactivated true ;
-      sh:path schema:unitCode ;
-      sh:class qudt:Unit ;
-      sh:minCount 1 ;
+      sh:path schema:value ;
       sh:maxCount 1 ;
-      sh:node
-        [
-          sh:property
-            [
-              sh:path qudt:hasQuantityKind ;
-              sh:class quantitykind:Mass ;
-            ] ;
-        ] ;
-    ] ;
-  sh:node <#valueOrMinMax> ;
+    ],
+    [
+      sh:path schema:maxValue ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path schema:minValue ;
+      sh:maxCount 1 ;
+    ]
 .
 
-<#valueOrMinMax>
+<#quantativeValueValue>
+  a sh:NodeShape ;
+  sh:targetSubjectsOf schema:value ;
   sh:message "Either value or min/max should be present but not both" ;
-  sh:xone
-    (
-        [
-          sh:property [ sh:path schema:value ; sh:maxCount 1 ; sh:minCount 1 ] ;
-          sh:property [ sh:path schema:minValue ; sh:maxCount 0 ] ;
-          sh:property [ sh:path schema:maxValue ; sh:maxCount 0 ] ;
-        ]
-        [
-          sh:property [ sh:path schema:value ; sh:maxCount 0 ] ;
-          sh:property [ sh:path schema:minValue ; sh:maxCount 1 ; sh:minCount 1 ] ;
-          sh:property [ sh:path schema:maxValue ; sh:maxCount 1 ; sh:minCount 1 ] ;
-        ]
-        [
-          sh:property [ sh:path schema:value ; sh:maxCount 0 ] ;
-          sh:property [ sh:path schema:minValue ; sh:maxCount 0 ] ;
-          sh:property [ sh:path schema:maxValue ; sh:maxCount 0 ] ;
-        ]
-    ) ;
-.
+  sh:property
+    [
+      sh:path schema:value ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path schema:maxValue ;
+      sh:maxCount 0 ;
+    ],
+    [
+      sh:path schema:minValue ;
+      sh:maxCount 0 ;
+    ] .
+
+<#quantativeValueMinMaxValue>
+  a sh:NodeShape ;
+  sh:targetSubjectsOf schema:maxValue, schema:minValue ;
+  sh:message "Either value or min/max should be present but not both" ;
+  sh:property
+    [
+      sh:path schema:value ;
+      sh:maxCount 0 ;
+    ],
+    [
+      sh:path schema:maxValue ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path schema:minValue ;
+      sh:maxCount 1 ;
+    ] .
 
 <#additionalProperty>
   a sh:NodeShape ;

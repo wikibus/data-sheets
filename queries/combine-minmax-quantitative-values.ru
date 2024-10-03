@@ -22,5 +22,5 @@ WHERE {
   ?minQuantitativeValue ?pMin ?oMin .
   ?maxQuantitativeValue ?pMax ?oMax .
 
-  BIND (bnode("minMax") AS ?minMax)
+  BIND (bnode(md5(concat("min-max", str(?minQuantitativeValue), str(?maxQuantitativeValue)))) AS ?minMax)
 }
