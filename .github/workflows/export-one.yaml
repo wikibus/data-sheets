@@ -6,6 +6,8 @@ on:
       document_id:
         required: true
 
+run-name: Export ${{ github.event.inputs.document_id }}
+
 jobs:
   export-annotations:
     runs-on: ubuntu-latest
