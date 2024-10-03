@@ -40,7 +40,7 @@ CONSTRUCT {
   .
 
   ?entityId
-    a schema:QuantitativeValue ;
+    a ?entityType ;
     schema:value ?entityText
   .
 
@@ -248,5 +248,23 @@ where {
     BIND(SUBSTR(?sofaString, ?entityBegin + 1, ?entityEnd - ?entityBegin) as ?entitySofaText)
     BIND(COALESCE(?textfix, ?entitySofaText) as ?entityText)
     BIND(iri(concat("urn:bnode:", str(?entityBegin), "-", str(?entityEnd))) as ?entityId)
+
+    {
+        [] a <uima:webanno.custom.Link> ;
+          <uima:webanno.custom.Link-Dependent> ?entity ;
+          <uima:webanno.custom.Link-property> schema:vehicleEngine .
+
+        BIND(schema:EngineSpecification as ?entityEngineType)
+    }
+    UNION
+    {
+        [] a <uima:webanno.custom.Link> ;
+          <uima:webanno.custom.Link-Dependent> ?entity ;
+          <uima:webanno.custom.Link-property> schema:vehicleTransmission .
+
+        BIND(wikibus:GearboxSpecification as ?entityGearboxType)
+    }
+
+    BIND(COALESCE(?entityEngineType, ?entityGearboxType, schema:QuantitativeValue) as ?entityType)
   }
 }
